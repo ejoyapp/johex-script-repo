@@ -1,0 +1,16 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+*.pdb
+*.d
+*.exp
+*.ilk
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
