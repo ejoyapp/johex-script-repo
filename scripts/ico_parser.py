@@ -18,6 +18,43 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+MAGIC_BYTES = b"\x00\x00\x01\x00"
+SUPPORTED_EXTS = [".ico"]
+FORMAT_NAME = "Windows Icon (ICO)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. An ICO file always starts with a 6-byte ICONDIR header:
+    # idReserved (2 bytes, must be 0) + idType (2 bytes, must be 1 for ICO).
+    # Thus, the magic signature is exactly \x00\x00\x01\x00.
+    if len(hex_prefix) >= 6 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. Read idCount (number of images in the file) at offset 0x04.
+        # Use struct to unpack as a little-endian 16-bit unsigned integer (<H).
+        idCount = struct.unpack_from("<H", hex_prefix, 4)[0]
+        
+        # A valid ICO file must contain at least one image
+        if idCount > 0:
+            
+            # 3. The ICONDIR header is immediately followed by ICONDIRENTRY structures.
+            # Each entry is 16 bytes long. To validate, we ensure the file is at least 
+            # large enough to hold the 6-byte header and the first 16-byte entry (22 bytes).
+            if len(hex_prefix) >= 22:
+                return 100  # 100% certainty that it is a standard ICO file
+                
+            # Magic bytes match and image count is valid, but the file is highly truncated
+            return 80
+            
+        # Magic bytes match, but it declares 0 images (corrupted or invalid ICO)
+        return 20
+        
+    return 0
 
 def detect(r):
     if r.size < 6:

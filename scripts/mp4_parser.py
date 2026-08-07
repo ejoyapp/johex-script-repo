@@ -18,6 +18,60 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# The true identifier is the 'ftyp' box type located at offset 4
+MAGIC_BYTES = b"ftyp"
+SUPPORTED_EXTS = [".mp4", ".m4a", ".m4v", ".mov", ".3gp", ".heic", ".avif"]
+FORMAT_NAME = "ISO Base Media File Format (MP4/MOV)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. An MP4 file consists of a sequence of boxes (or atoms).
+    # It typically starts with an 'ftyp' (File Type) box.
+    # We need at least 12 bytes to read the size, type, and major brand.
+    if len(hex_prefix) >= 12:
+        
+        # 2. Check the box type at offset 4.
+        box_type = hex_prefix[4:8]
+        
+        if box_type == MAGIC_BYTES:
+            
+            # 3. Read the box size at offset 0.
+            # Use struct to unpack as a big-endian 32-bit unsigned integer (>I).
+            box_size = struct.unpack_from(">I", hex_prefix, 0)[0]
+            
+            # A valid 'ftyp' box must be at least 8 bytes (size + type), 
+            # but usually includes a major brand and minor version (>= 16 bytes total).
+            if box_size >= 8:
+                
+                # 4. Check the major brand at offset 8 to confirm the specific format.
+                major_brand = hex_prefix[8:12]
+                
+                # Common ISOBMFF major brands (Standard MP4, QuickTime, Apple Audio/Video, etc.)
+                known_brands = [
+                    b"isom", b"mp41", b"mp42", b"m4a ", 
+                    b"m4v ", b"qt  ", b"dash", b"avc1", 
+                    b"heic", b"avif", b"3gp4"
+                ]
+                
+                if major_brand in known_brands:
+                    return 100  # 100% certainty that it is a recognized MP4/ISOBMFF file
+                    
+                # It has a valid 'ftyp' box structure, but an uncommon or proprietary brand
+                return 80
+                
+        # 5. Fallback check:
+        # Very rarely, or in older/fragmented files, it might start directly 
+        # with a 'moov' (Movie) or 'mdat' (Media Data) box instead of 'ftyp'.
+        elif box_type in (b"moov", b"mdat"):
+            return 60
+            
+    return 0
 
 def detect(r):
     # The first 8 bytes of an MP4 file are usually: 00 00 00 XX 66 74 79 70 (ftyp)

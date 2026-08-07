@@ -18,6 +18,45 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# The Ext magic number is 0xEF53 (stored as little-endian 0x53, 0xEF) at absolute offset 0x438
+MAGIC_BYTES = b"\x53\xEF" 
+SUPPORTED_EXTS = [".img", ".ext4", ".dd", ".bin", ".vhd", ".vhdx"]
+FORMAT_NAME = "Ext4 File System Image"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. The Superblock starts at 0x400 (1024). 
+    # We need to reach at least 0x450 (1104) to read the magic number and feature flags.
+    if len(hex_prefix) >= 1104:
+        
+        # 2. Check the Ext Superblock magic number at absolute offset 0x438.
+        # Use struct to unpack as a little-endian 16-bit unsigned integer (<H).
+        s_magic = struct.unpack_from("<H", hex_prefix, 0x438)[0]
+        
+        if s_magic == 0xEF53:
+            
+            # 3. 0xEF53 is shared by Ext2, Ext3, and Ext4. 
+            # To specifically identify Ext4, we check the incompatible feature flags (s_feature_incompat).
+            # Located at superblock offset 0x4C (absolute offset 0x400 + 0x4C = 0x44C).
+            s_feature_incompat = struct.unpack_from("<I", hex_prefix, 0x44C)[0]
+            
+            # The INCOMPAT_EXTENTS flag (0x40) is strongly indicative of an Ext4 filesystem.
+            EXT4_FEATURE_INCOMPAT_EXTENTS = 0x0040
+            
+            if (s_feature_incompat & EXT4_FEATURE_INCOMPAT_EXTENTS) != 0:
+                return 100  # 100% certainty that it is an Ext4 volume/image
+                
+            # Magic bytes match, but it lacks Ext4 specific features (might be Ext2 or Ext3)
+            return 70
+            
+    # The file is severely truncated (doesn't even contain the superblock)
+    return 0
 
 def detect(r):
     # The ext4 superblock is always fixed at the 1024-byte offset of the partition

@@ -18,6 +18,32 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+MAGIC_BYTES = b"MZ"
+SUPPORTED_EXTS = [".exe", ".dll", ".sys", ".ocx"]
+FORMAT_NAME = "Portable Executable (PE)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. Check for the DOS header 'MZ' (0x5A4D)
+    if len(hex_prefix) >= 0x40 and hex_prefix.startswith(b"MZ"):
+        
+        # 2. Read e_lfanew (NT header offset) at 0x3C
+        # Use struct to unpack as a little-endian 32-bit unsigned integer (<I)
+        e_lfanew = struct.unpack_from("<I", hex_prefix, 0x3C)[0]
+        
+        # 3. Check for the NT header 'PE\0\0' signature
+        if e_lfanew > 0 and (e_lfanew + 4) <= len(hex_prefix):
+            if hex_prefix[e_lfanew:e_lfanew+4] == b"PE\x00\x00":
+                return 100  # 100% certainty that it is a PE file
+        return 50 # Only has an MZ header; might be a pure DOS program or a truncated file
+    return 0
+
 
 def detect(r):
     return r.size >= 0x40 and r.u16(0) == 0x5A4D

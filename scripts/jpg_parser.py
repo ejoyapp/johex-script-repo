@@ -18,6 +18,43 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# A standard JPEG starts with SOI (0xFF 0xD8) followed by another marker (0xFF)
+MAGIC_BYTES = b"\xFF\xD8\xFF"
+SUPPORTED_EXTS = [".jpg", ".jpeg", ".jpe", ".jfif"]
+FORMAT_NAME = "JPEG Image"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. Check for the SOI marker (\xFF\xD8) and the start of the next marker (\xFF).
+    if len(hex_prefix) >= 3 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. To achieve 100% certainty, we can look for standard application segment identifiers.
+        # These are typically located starting at offset 6.
+        if len(hex_prefix) >= 12:
+            
+            # APP0 segment typically contains the "JFIF\x00" identifier
+            if hex_prefix[6:11] == b"JFIF\x00":
+                return 100  # 100% certainty that it is a standard JFIF JPEG
+                
+            # APP1 segment typically contains the "Exif\x00\x00" identifier
+            if hex_prefix[6:12] == b"Exif\x00\x00":
+                return 100  # 100% certainty that it is an Exif JPEG
+                
+        # 3. If it starts with \xFF\xD8\xFF but lacks standard JFIF/Exif tags 
+        # (e.g., some raw or non-standard JPEG streams), it is still highly likely a JPEG.
+        return 90
+        
+    # Check for severely truncated files that only have the SOI marker
+    if len(hex_prefix) >= 2 and hex_prefix.startswith(b"\xFF\xD8"):
+        return 50
+        
+    return 0
 
 def detect(r):
     # Classic magic number for JPG: FF D8 (Start of Image)

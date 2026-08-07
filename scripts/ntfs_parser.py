@@ -18,6 +18,52 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import hexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# The true identifier is the OEM Name "NTFS    " at offset 0x03
+MAGIC_BYTES = b"NTFS    "
+SUPPORTED_EXTS = [".img", ".dd", ".bin", ".vhd", ".vhdx", ".ntfs"]
+FORMAT_NAME = "NTFS File System Image"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. An NTFS Boot Sector requires at least 11 bytes to read the OEM name,
+    # but a full boot sector is typically 512 bytes.
+    if len(hex_prefix) >= 11:
+        
+        # 2. Extract the OEM Name field at offset 0x03 (8 bytes long).
+        # For NTFS, this must be exactly 'NTFS    ' (with four trailing spaces).
+        oem_name = hex_prefix[3:11]
+        
+        if oem_name == MAGIC_BYTES:
+            
+            # 3. Check for the standard boot sector signature (0x55 0xAA) at offset 0x1FE (510).
+            # Use struct to unpack as a little-endian 16-bit unsigned integer (<H).
+            if len(hex_prefix) >= 512:
+                boot_signature = struct.unpack_from("<H", hex_prefix, 510)[0]
+                
+                if boot_signature == 0xAA55:
+                    
+                    # 4. (Optional but good) Validate the Bytes Per Sector at offset 0x0B
+                    # Usually 512 (0x0200) or 4096 (0x1000).
+                    bps = struct.unpack_from("<H", hex_prefix, 0x0B)[0]
+                    if bps in (512, 1024, 2048, 4096):
+                        return 100  # 100% certainty that it is an NTFS volume/image
+                    
+                    # Magic bytes match, but bytes per sector is unusual
+                    return 90
+                
+                # OEM Name matches, but the end-of-sector signature is missing or corrupted
+                return 80
+                
+            # The file is severely truncated (less than a single sector), but has the NTFS OEM name
+            return 50
+            
+    return 0
 
 def get_vbr_sector(r):
     """

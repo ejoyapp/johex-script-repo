@@ -18,6 +18,50 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# A WAV file is a RIFF container that specifically holds the "WAVE" format
+MAGIC_BYTES = b"RIFF"
+SUPPORTED_EXTS = [".wav", ".wave"]
+FORMAT_NAME = "Waveform Audio File Format (WAV)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. A standard WAV file header is at least 12 bytes long: 
+    # 'RIFF' (4 bytes) + File Size (4 bytes) + 'WAVE' (4 bytes).
+    if len(hex_prefix) >= 12 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. Check for the 'WAVE' format identifier at offset 8.
+        format_id = hex_prefix[8:12]
+        
+        if format_id == b"WAVE":
+            
+            # 3. For even higher confidence, check if the first chunk immediately 
+            # following the header is the standard 'fmt ' chunk (starting at offset 12).
+            if len(hex_prefix) >= 16:
+                first_chunk_id = hex_prefix[12:16]
+                
+                if first_chunk_id == b"fmt ":
+                    return 100  # 100% certainty that it is a standard WAV file
+                    
+            # It is a valid RIFF-WAVE file, but might have custom chunks (like 'JUNK')
+            # inserted before the 'fmt ' chunk.
+            return 90
+            
+        # It is a RIFF container, but not a WAV file (could be AVI, WebP, etc.)
+        return 0
+        
+    # 4. Check for severely truncated files that only have the 'RIFF' magic bytes
+    if len(hex_prefix) >= 4 and hex_prefix.startswith(MAGIC_BYTES):
+        if file_ext.lower() in SUPPORTED_EXTS:
+            return 40  # Truncated, but extension hints at WAV
+        return 10      # Just a generic RIFF fragment
+        
+    return 0
 
 def detect(r):
     # A WAV file requires at least a 12-byte header

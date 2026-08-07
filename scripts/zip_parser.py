@@ -18,6 +18,48 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# The standard Local File Header signature
+MAGIC_BYTES = b"PK\x03\x04"
+SUPPORTED_EXTS = [".zip", ".cbz", ".epub", ".jar", ".apk"]
+FORMAT_NAME = "ZIP Archive"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. Check for the standard ZIP Local File Header signature 'PK\x03\x04'
+    if len(hex_prefix) >= 4:
+        if hex_prefix.startswith(MAGIC_BYTES):
+            
+            # 2. A standard Local File Header is exactly 30 bytes long (excluding the variable-length filename/extra fields).
+            # To increase certainty, we can verify the file has at least the minimum header length.
+            if len(hex_prefix) >= 30:
+                
+                # We could further validate fields like the compression method at offset 0x08,
+                # but the PK\x03\x04 signature coupled with a valid 30-byte header length 
+                # is generally enough to confirm a standard ZIP file.
+                return 100  # 100% certainty that it is a standard ZIP archive
+                
+            # Magic bytes match exactly, but the file is severely truncated (less than 30 bytes total)
+            return 80
+            
+        # 3. Fallback check for an empty ZIP archive.
+        # Empty ZIP files contain no files and just consist of an End of Central Directory (EOCD) record.
+        elif hex_prefix.startswith(b"PK\x05\x06"):
+            if len(hex_prefix) >= 22: # The minimum size of an EOCD record is 22 bytes
+                return 100  # 100% certainty that it is an empty ZIP archive
+            return 80
+            
+        # 4. Fallback check for Spanned/Split ZIP archives.
+        # These often start with a spanning signature 'PK\x07\x08'
+        elif hex_prefix.startswith(b"PK\x07\x08"):
+            return 90
+            
+    return 0
 
 def detect(r):
     # Standard file header signature for ZIP files (PK\x03\x04) or EOCD signature for empty ZIPs (PK\x05\x06)

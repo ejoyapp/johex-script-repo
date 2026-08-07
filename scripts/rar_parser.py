@@ -18,6 +18,40 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# Both RAR4 and RAR5 start with the same 6-byte sequence
+MAGIC_BYTES = b"Rar!\x1A\x07"
+SUPPORTED_EXTS = [".rar", ".rev"]
+FORMAT_NAME = "Roshal Archive (RAR)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. Check for the base RAR signature (first 6 bytes)
+    if len(hex_prefix) >= 7 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. Differentiate between RAR4 and RAR5 formats
+        # RAR4 signature is 7 bytes: 52 61 72 21 1A 07 00
+        if hex_prefix[6] == 0x00:
+            return 100  # 100% certainty that it is a RAR4 archive
+            
+        # RAR5 signature is 8 bytes: 52 61 72 21 1A 07 01 00
+        if len(hex_prefix) >= 8 and hex_prefix[6:8] == b"\x01\x00":
+            return 100  # 100% certainty that it is a RAR5 archive
+            
+        # 3. Base magic bytes match, but the version bytes are unrecognized
+        # This could be a corrupted file or an unknown future version
+        return 80
+        
+    # Check for severely truncated files that only have the 6-byte base signature
+    if len(hex_prefix) == 6 and hex_prefix == MAGIC_BYTES:
+        return 50
+        
+    return 0
 
 def detect(r):
     if r.size < 7:

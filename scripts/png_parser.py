@@ -18,6 +18,39 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# The PNG signature is exactly 8 bytes long, designed to detect transmission errors
+MAGIC_BYTES = b"\x89PNG\r\n\x1a\n"
+SUPPORTED_EXTS = [".png"]
+FORMAT_NAME = "Portable Network Graphics (PNG)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. A standard PNG file always begins with an 8-byte signature.
+    if len(hex_prefix) >= 8 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. Immediately following the signature is the first chunk, 
+        # which must be the Image Header (IHDR) chunk.
+        # A chunk header consists of a 4-byte length followed by a 4-byte chunk type.
+        # Therefore, the chunk type string starts at offset 12 (8-byte sig + 4-byte length).
+        if len(hex_prefix) >= 16:
+            chunk_type = hex_prefix[12:16]
+            
+            if chunk_type == b"IHDR":
+                return 100  # 100% certainty that it is a standard PNG file
+                
+            # Magic bytes match, but the first chunk is not IHDR (corrupted or non-standard PNG)
+            return 80
+            
+        # Magic bytes match exactly, but the file is severely truncated (no chunks present)
+        return 50
+        
+    return 0
 
 def detect(r):
     if r.size < 8:

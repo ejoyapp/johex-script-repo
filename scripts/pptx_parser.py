@@ -18,6 +18,45 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+MAGIC_BYTES = b"PK\x03\x04"
+SUPPORTED_EXTS = [".pptx", ".pptm", ".potx", ".potm", ".ppsx", ".ppsm"]
+FORMAT_NAME = "Microsoft PowerPoint Open XML (PPTX)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. PPTX files are ZIP archives, check for the ZIP Local File Header signature 'PK\x03\x04'
+    if len(hex_prefix) >= 30 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. To distinguish PPTX from other ZIP-based formats, we look for Office Open XML structures.
+        # The first few files in the archive typically include '[Content_Types].xml', '_rels/.rels', or 'ppt/'
+        if b"ppt/" in hex_prefix:
+            return 100  # 100% certainty that it is a PowerPoint-specific Open XML document
+            
+        if b"[Content_Types].xml" in hex_prefix:
+            # It is definitely an Office Open XML file, check extension to confirm it's PowerPoint
+            if file_ext.lower() in SUPPORTED_EXTS:
+                return 100
+            return 80 # Highly likely an Office document, but might be Word/Excel without the matching extension
+            
+        # 3. Magic bytes match a ZIP file, but we don't see obvious PPTX internal file paths in the first 4KB.
+        # We rely on the extension to give a moderate confidence score.
+        if file_ext.lower() in SUPPORTED_EXTS:
+            return 60
+            
+        # Just a generic ZIP archive with no PPTX indicators
+        return 20 
+        
+    # Check for empty/corrupted ZIP files that only have the PK header
+    if len(hex_prefix) >= 4 and hex_prefix.startswith(MAGIC_BYTES):
+        return 10
+        
+    return 0
 
 def detect(r):
     # PPTX is essentially a ZIP, the magic number must be PK\x03\x04

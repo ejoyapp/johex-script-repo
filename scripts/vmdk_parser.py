@@ -18,6 +18,43 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# Binary sparse VMDKs start with 'KDMV'. Text descriptors start with '# Disk DescriptorFile'.
+MAGIC_BYTES = b"KDMV"
+SUPPORTED_EXTS = [".vmdk"]
+FORMAT_NAME = "VMware Virtual Disk (VMDK)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. Check for the binary sparse VMDK magic signature 'KDMV' (0x56 0x4D 0x44 0x4B)
+    if len(hex_prefix) >= 4 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. Read the version number at offset 0x04.
+        # Use struct to unpack as a little-endian 32-bit unsigned integer (<I).
+        if len(hex_prefix) >= 8:
+            version = struct.unpack_from("<I", hex_prefix, 4)[0]
+            
+            # Commonly used sparse VMDK versions are 1, 2, or 3
+            if version in (1, 2, 3):
+                return 100  # 100% certainty that it is a sparse VMDK image
+                
+            # Magic bytes match exactly, but the version is unrecognized or future
+            return 80
+            
+        # File is severely truncated and only contains the 'KDMV' magic bytes
+        return 50
+
+    # 3. Fallback check for monolithic flat / text-based VMDK descriptor files.
+    # These are plain text and typically begin with a specific comment line.
+    if hex_prefix.startswith(b"# Disk DescriptorFile"):
+        return 100  # 100% certainty that it is a VMDK descriptor file
+        
+    return 0
 
 def detect(r):
     # The VMDK Sparse format header is fixed at 512 bytes or larger

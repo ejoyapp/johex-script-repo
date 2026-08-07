@@ -18,6 +18,39 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+MAGIC_BYTES = b"BM"
+SUPPORTED_EXTS = [".bmp", ".dib"]
+FORMAT_NAME = "Bitmap Image (BMP)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. A standard BMP File Header is 14 bytes, followed by the DIB Header.
+    # We need at least 18 bytes to read the magic bytes and the DIB header size.
+    if len(hex_prefix) >= 18 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. Read bfOffBits (offset to pixel data) at 0x0A (10)
+        # and biSize (size of DIB header) at 0x0E (14).
+        # Use struct to unpack as two little-endian 32-bit unsigned integers (<II)
+        bfOffBits, biSize = struct.unpack_from("<II", hex_prefix, 10)
+        
+        # 3. Perform basic validation on the header values
+        # The pixel data offset must be at least the size of the File Header (14).
+        # The DIB header size is at least 12 bytes (BITMAPCOREHEADER) or typically 40 (BITMAPINFOHEADER).
+        if bfOffBits >= 14 and biSize >= 12:
+            return 100  # 100% certainty that it is a standard BMP file
+            
+        # Magic bytes match, but header values are corrupted or highly unusual
+        return 80
+    # Check for severely truncated files that only have the 'BM' magic bytes
+    if len(hex_prefix) >= 2 and hex_prefix.startswith(MAGIC_BYTES):
+        return 50        
+    return 0
 
 def detect(r):
     # BMP file header must be at least 14 bytes

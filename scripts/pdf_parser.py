@@ -19,6 +19,45 @@ __status__     = "Official / Built-in"
 
 import johexedit as hx
 import re
+import struct
+
+# Register static features (for AI or other static scanning tools)
+MAGIC_BYTES = b"%PDF-"
+SUPPORTED_EXTS = [".pdf"]
+FORMAT_NAME = "Portable Document Format (PDF)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    if not hex_prefix:
+        return 0
+
+    # 1. Standard PDFs begin exactly with the magic signature '%PDF-'
+    if hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. The signature is typically followed by a version number (e.g., '1.4', '1.7', '2.0').
+        # Ensure we have enough bytes to read a basic header (at least 8 bytes for '%PDF-1.x').
+        if len(hex_prefix) >= 8:
+            return 100  # 100% certainty that it is a standard PDF file
+            
+        # File is severely truncated but starts with the exact magic bytes
+        return 80
+        
+    # 3. According to older PDF specifications, the '%PDF-' signature is considered valid 
+    # as long as it appears somewhere within the first 1024 bytes of the file.
+    search_area = hex_prefix[:1024]
+    
+    if MAGIC_BYTES in search_area:
+        # 4. We found the signature, but it's not at offset 0.
+        # This is valid, but we reduce the certainty score slightly to account for 
+        # non-standard generation or files that merely embed a PDF signature.
+        if file_ext.lower() in SUPPORTED_EXTS:
+            return 90
+        return 70  # Signature found in first 1KB, but missing or mismatched extension
+        
+    return 0
 
 def detect(r):
     # PDF standard magic number

@@ -18,6 +18,56 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# The most common identifier is the ID3v2 tag at the start of the file
+MAGIC_BYTES = b"ID3"
+SUPPORTED_EXTS = [".mp3"]
+FORMAT_NAME = "MPEG Audio Layer III (MP3)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    if not hex_prefix:
+        return 0
+
+    # 1. Check for an ID3v2 tag (the most common start for modern MP3 files).
+    # An ID3v2 header is exactly 10 bytes long.
+    if len(hex_prefix) >= 10 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. Validate the ID3 version. 
+        # Byte at offset 3 is the major version, offset 4 is the minor version.
+        major_version = hex_prefix[3]
+        
+        # Commonly used versions are ID3v2.2, ID3v2.3, and ID3v2.4
+        if major_version in (2, 3, 4):
+            return 100  # 100% certainty that it has a valid ID3 tag (almost certainly an MP3)
+            
+        # Magic bytes match, but the ID3 version is unrecognized
+        return 80
+        
+    # 3. If there is no ID3 tag, check for a raw MPEG audio frame sync.
+    # The frame sync is 11 consecutive set bits: 11111111 111xxxxx (0xFF, followed by a byte >= 0xE0).
+    if len(hex_prefix) >= 2 and hex_prefix[0] == 0xFF and (hex_prefix[1] & 0xE0) == 0xE0:
+        
+        # 4. Check the "Layer" bits to ensure it is actually Layer III (MP3).
+        # Bits 2 and 1 of the second byte indicate the layer (01 = Layer III, 10 = Layer II, 11 = Layer I).
+        layer_bits = (hex_prefix[1] & 0x06) >> 1
+        
+        if layer_bits == 1:  # Layer III (MP3)
+            # A raw frame sync is strong evidence, but since it's just audio data and 
+            # lacks a structured file header, we rely slightly on the extension for max confidence.
+            if file_ext.lower() in SUPPORTED_EXTS:
+                return 90
+            return 70  # Valid MP3 frame sync, but missing or mismatched extension
+            
+        # Has an MPEG frame sync, but it's not Layer III (might be MP2 or MP1)
+        return 40
+        
+    return 0
 
 def detect(r):
     if r.size < 10:

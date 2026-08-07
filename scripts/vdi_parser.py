@@ -18,6 +18,53 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# The true identifier is the VDI magic signature 0xBEDA107F at offset 0x40 (64)
+MAGIC_BYTES = b"\x7F\x10\xDA\xBE"
+SUPPORTED_EXTS = [".vdi"]
+FORMAT_NAME = "VirtualBox Disk Image (VDI)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. The VDI file header starts with a 64-byte text description.
+    # The actual magic signature (4 bytes) is located at offset 0x40 (64).
+    # We need at least 68 bytes to read the signature, and 72 bytes to read the version.
+    if len(hex_prefix) >= 72:
+        
+        # 2. Check the VDI magic signature at offset 0x40.
+        # Use struct to unpack as a little-endian 32-bit unsigned integer (<I).
+        vdi_signature = struct.unpack_from("<I", hex_prefix, 0x40)[0]
+        
+        # 0xBEDA107F is the standard VDI signature
+        if vdi_signature == 0xBEDA107F:
+            
+            # 3. Validate the VDI version at offset 0x44.
+            # Commonly 0x00010001 (Version 1.1) or 0x00010000 (Version 1.0).
+            vdi_version = struct.unpack_from("<I", hex_prefix, 0x44)[0]
+            
+            if vdi_version in (0x00010000, 0x00010001):
+                return 100  # 100% certainty that it is a standard VDI image
+                
+            # Magic signature matches, but the version is unrecognized or from a newer spec
+            return 80
+            
+        # 4. Fallback check: If the signature doesn't match, check if it 
+        # starts with the typical VirtualBox text descriptor (e.g., "<<< Oracle VM...").
+        if hex_prefix.startswith(b"<<< "):
+            if file_ext.lower() in SUPPORTED_EXTS:
+                return 50  # Has the text header and extension, but no valid binary signature
+            return 30
+            
+    # Check for severely truncated files that only have the text descriptor start
+    elif len(hex_prefix) >= 4 and hex_prefix.startswith(b"<<< "):
+        return 10
+        
+    return 0
 
 def detect(r):
     # VDI files must have at least a 72-byte pre-header and magic number

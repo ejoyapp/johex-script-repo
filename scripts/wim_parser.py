@@ -18,6 +18,40 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# WIM files always start with the 8-byte signature "MSWIM\0\0\0"
+MAGIC_BYTES = b"MSWIM\x00\x00\x00"
+SUPPORTED_EXTS = [".wim", ".swm", ".esd"]
+FORMAT_NAME = "Windows Imaging Format (WIM)"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. Check for the 8-byte MSWIM signature.
+    if len(hex_prefix) >= 8 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. To ensure higher certainty, check the header size and WIM version.
+        # Header size is at offset 0x08 (4 bytes), Version is at offset 0x0C (4 bytes).
+        if len(hex_prefix) >= 16:
+            # Use struct to unpack two little-endian 32-bit unsigned integers (<II).
+            cbSize, dwVersion = struct.unpack_from("<II", hex_prefix, 8)
+            
+            # The standard WIM header size is usually 208 bytes (0x000000D0) 
+            # and the typical version is 1.13 (0x00010D00).
+            if cbSize == 208 and dwVersion == 0x00010D00:
+                return 100  # 100% certainty that it is a standard WIM/ESD file
+                
+            # Magic bytes match exactly, but it has an unusual header size or newer version
+            return 80
+            
+        # File is severely truncated and only contains the 8-byte signature
+        return 50
+        
+    return 0
 
 def detect(r):
     # WIM file header size is fixed at 208 bytes (0xD0)

@@ -18,6 +18,51 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+# The File System Type string "FAT32   " is typically located at offset 0x52
+MAGIC_BYTES = b"FAT32   "
+SUPPORTED_EXTS = [".img", ".dd", ".bin", ".vhd", ".vhdx", ".fat32", ".fat"]
+FORMAT_NAME = "FAT32 File System Image"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. A standard FAT32 Volume Boot Record (VBR) is 512 bytes long.
+    if len(hex_prefix) >= 512:
+        
+        # 2. Check for the standard boot sector signature (0x55 0xAA) at offset 0x1FE (510).
+        # Use struct to unpack as a little-endian 16-bit unsigned integer (<H).
+        boot_signature = struct.unpack_from("<H", hex_prefix, 510)[0]
+        
+        if boot_signature == 0xAA55:
+            
+            # 3. Differentiate FAT32 from FAT12/FAT16.
+            # In FAT32, the 16-bit Sectors Per FAT (BPB_FATSz16) at offset 0x16 must be 0.
+            # The 32-bit Sectors Per FAT (BPB_FATSz32) at offset 0x24 must be non-zero.
+            bpb_fatsz16 = struct.unpack_from("<H", hex_prefix, 0x16)[0]
+            bpb_fatsz32 = struct.unpack_from("<I", hex_prefix, 0x24)[0]
+            
+            if bpb_fatsz16 == 0 and bpb_fatsz32 > 0:
+                
+                # 4. Check the File System Type string at offset 0x52.
+                # While technically informational according to specs, it is a very strong indicator when present.
+                bs_filsystype = hex_prefix[0x52:0x52+8]
+                
+                if bs_filsystype == MAGIC_BYTES:
+                    return 100  # 100% certainty that it is a FAT32 volume/image
+                
+                # It has FAT32 structural characteristics, but lacks the "FAT32   " string
+                return 80
+                
+            # It has a boot signature, but structural fields don't match FAT32 (might be FAT16, NTFS, or MBR)
+            return 20
+            
+    # The file is severely truncated (less than a single sector)
+    return 0
 
 def detect(r):
     if r.size < 512:

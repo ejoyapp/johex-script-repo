@@ -18,6 +18,36 @@ __copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__     = "Official / Built-in"
 
 import johexedit as hx
+import struct
+
+# Register static features (for AI or other static scanning tools)
+MAGIC_BYTES = b"7z\xbc\xaf'\x1c"
+SUPPORTED_EXTS = [".7z"]
+FORMAT_NAME = "7-Zip Archive"
+
+def identify(hex_prefix: bytes, file_ext: str) -> int:
+    """
+    Detection function called by the C++ engine.
+    Receives the first 4KB byte stream (hex_prefix) and the file extension.
+    """
+    # 1. A standard 7z SignatureHeader is 32 bytes long.
+    # Check if we have at least the 6-byte magic signature.
+    # 7z signature: '7' 'z' BC AF 27 1C (0x37 0x7A 0xBC 0xAF 0x27 0x1C)
+    if len(hex_prefix) >= 6 and hex_prefix.startswith(MAGIC_BYTES):
+        
+        # 2. Check the ArchiveVersion (Major and Minor) for higher certainty
+        # Offset 6 is Major version, Offset 7 is Minor version.
+        if len(hex_prefix) >= 8:
+            major_version = hex_prefix[6]
+            
+            # Currently, the standard 7z format major version is always 0
+            if major_version == 0:
+                return 100  # 100% certainty that it is a standard 7z file
+            # Magic bytes match, but it's an unknown or future major version
+            return 80 
+        # Has the exact magic bytes, but the file is truncated/too short for a full header
+        return 50 
+    return 0
 
 def detect(r):
     # The 7z file header must be at least 32 bytes
