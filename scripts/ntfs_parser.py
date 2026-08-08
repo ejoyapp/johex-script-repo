@@ -33,7 +33,7 @@ __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"
 # =================================================================
 
-import hexedit as hx
+import johexedit as hx
 import struct
 
 # Register static features (for AI or other static scanning tools)
