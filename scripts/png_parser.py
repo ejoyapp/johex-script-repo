@@ -14,7 +14,7 @@ Modification of this core script may affect built-in analysis features.
 # =================================================================
 __id__          = "johex.parser.png"
 __name__        = "PNG Parser"
-__version__     = "1.0.0"
+__version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Media Parsers"
 __description__ = (

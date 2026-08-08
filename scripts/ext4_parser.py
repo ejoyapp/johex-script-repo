@@ -14,7 +14,7 @@ Modification of this core script may affect built-in analysis features.
 # =================================================================
 __id__          = "johex.parser.ext4"
 __name__        = "ext4 Parser"
-__version__     = "1.0.0"
+__version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "File System Parsers"
 __description__ = (

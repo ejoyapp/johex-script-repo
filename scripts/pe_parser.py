@@ -14,7 +14,7 @@ Modification of this core script may affect built-in analysis features.
 # =================================================================
 __id__          = "johex.parser.pe"
 __name__        = "PE Parser"
-__version__     = "1.3.0"
+__version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "File Format Parsers"
 __description__ = (
