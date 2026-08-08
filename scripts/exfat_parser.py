@@ -17,17 +17,17 @@ __name__        = "ExFAT Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "File System Parsers"
-__description__ = (
+__description__ = '''
     "A modern parser tailored for high-capacity flash storage file systems. "
     "Decodes shift-based sector/cluster mathematics and provides direct FOA "
     "navigation to the FAT table and the continuous Cluster Heap data area."
-)
-__features__    = (
+'''
+__features__    = '''
     "• Shift-based sector/cluster math decoding\n"
     "• Direct FOA navigation to FAT table\n"
     "• Continuous Cluster Heap data area mapping\n"
     "• ExFAT VBR parsing"
-)
+'''
 __formats__     = ".exfat, .img, .dd"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

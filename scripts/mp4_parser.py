@@ -17,16 +17,16 @@ __name__        = "MP4 Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Media Parsers"
-__description__ = (
+__description__ = '''
     "A hierarchical parser for the MP4 multimedia container. "
     "Recursively unwraps the Box/Atom architecture, providing deep visibility into "
     "the 'moov' metadata tree and instantly isolating the massive 'mdat' media payload."
-)
-__features__    = (
+'''
+__features__    = '''
     "• Recursive Box/Atom architecture unwrapping\n"
     "• Deep visibility into the 'moov' metadata tree\n"
     "• 'mdat' media payload isolation"
-)
+'''
 __formats__     = ".mp4, .m4a, .m4v, .mov"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

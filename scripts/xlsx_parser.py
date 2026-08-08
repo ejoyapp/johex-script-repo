@@ -17,17 +17,17 @@ __name__        = "XLSX Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Document Parsers"
-__description__ = (
+__description__ = '''
     "A semantic parser for modern Microsoft Excel workbooks (OOXML). "
     "Provides deep visibility into the underlying ZIP structure, visually isolating "
     "shared string tables (SharedStrings), worksheets, and embedded macro vectors."
-)
-__features__    = (
+'''
+__features__    = '''
     "• ZIP structure extraction\n"
     "• SharedStrings table isolation\n"
     "• Worksheet and embedded macro vector highlighting\n"
     "• FOA jumps to raw XML streams"
-)
+'''
 __formats__     = ".xlsx, .xlsm, .xltx"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

@@ -17,16 +17,16 @@ __name__        = "ICO Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Media Parsers"
-__description__ = (
+__description__ = '''
     "A precise parser for the Windows Icon resource format. "
     "Decodes the global ICONDIR header and provides one-click FOA routing from "
     "directory entries directly to the embedded BMP or PNG image payloads."
-)
-__features__    = (
+'''
+__features__    = '''
     "• Global ICONDIR header decoding\n"
     "• Directory entries parsing\n"
     "• One-click FOA routing to embedded BMP or PNG payloads"
-)
+'''
 __formats__     = ".ico, .cur"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

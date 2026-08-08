@@ -17,17 +17,17 @@ __name__        = "NTFS Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "File System Parsers"
-__description__ = (
+__description__ = '''
     "An industrial-grade forensic parser for raw NTFS volumes and disk images. "
     "Features intelligent MBR/GPT partition routing, BIOS Parameter Block (BPB) decoding, "
     "and LCN-to-FOA translation for instant jumps to the Master File Table ($MFT)."
-)
-__features__    = (
+'''
+__features__    = '''
     "• Intelligent MBR/GPT partition routing\n"
     "• BIOS Parameter Block (BPB) decoding\n"
     "• LCN-to-FOA translation\n"
     "• Instant jumps to the Master File Table ($MFT)"
-)
+'''
 __formats__     = ".ntfs, .img, .dd, .vhd, .vhdx"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

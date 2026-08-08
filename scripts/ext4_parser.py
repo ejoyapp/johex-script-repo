@@ -17,17 +17,17 @@ __name__        = "ext4 Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "File System Parsers"
-__description__ = (
+__description__ = '''
     "A deep-dive parser for the standard Linux ext4 file system. "
     "Exposes the 1024-byte Superblock, Block Group Descriptor Tables (BGDT), "
     "and performs bit-shift offset calculations to locate the Root Directory (Inode 2)."
-)
-__features__    = (
+'''
+__features__    = '''
     "• 1024-byte Superblock exposure\n"
     "• Block Group Descriptor Tables (BGDT) parsing\n"
     "• Bit-shift offset calculations\n"
     "• Root Directory (Inode 2) FOA location"
-)
+'''
 __formats__     = ".ext4, .img, .dd"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

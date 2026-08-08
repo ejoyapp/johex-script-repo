@@ -17,17 +17,17 @@ __name__        = "ZIP Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Archive Parsers"
-__description__ = (
+__description__ = '''
     "A high-performance structural parser for the standard ZIP archive format. "
     "Parses Local File Headers and provides reverse-engineered FOA routing from the "
     "End of Central Directory (EOCD) back to the Central Directory records."
-)
-__features__    = (
+'''
+__features__    = '''
     "• Local File Headers parsing\n"
     "• End of Central Directory (EOCD) to Central Directory reverse routing\n"
     "• Compressed data isolation\n"
     "• Regex-based boundary scanning"
-)
+'''
 __formats__     = ".zip, .apk, .jar"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

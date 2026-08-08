@@ -17,17 +17,17 @@ __name__        = "PPTX Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Document Parsers"
-__description__ = (
+__description__ = '''
     "A semantic parser for modern Microsoft PowerPoint documents (OOXML). "
     "Leverages high-speed regex boundary scanning and FOA hyperlinking to "
     "expose internal ZIP structures, isolating slides, media, and embedded OLE objects."
-)
-__features__    = (
+'''
+__features__    = '''
     "• ZIP structure extraction\n"
     "• High-speed regex boundary scanning\n"
     "• Semantic color-coding for slides, media, and OLE objects\n"
     "• Central Directory to Local File Header FOA routing"
-)
+'''
 __formats__     = ".pptx, .ppsx, .potx"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

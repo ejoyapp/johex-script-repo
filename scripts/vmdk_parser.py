@@ -17,17 +17,17 @@ __name__        = "VMDK Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Virtual Disk Parsers"
-__description__ = (
+__description__ = '''
     "A forensic parser for VMware monolithic sparse virtual disks. "
     "Extracts the embedded plaintext configuration descriptor and maps "
     "the dual-layer Grain Directory (L1) and Grain Table (L2) paging structures."
-)
-__features__    = (
+'''
+__features__    = '''
     "• Embedded plaintext configuration descriptor extraction\n"
     "• Dual-layer Grain Directory (L1) and Grain Table (L2) mapping\n"
     "• Sparse Header and capacity calculation\n"
     "• Data grain isolation"
-)
+'''
 __formats__     = ".vmdk"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

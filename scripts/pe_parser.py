@@ -17,13 +17,13 @@ __name__        = "PE Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "File Format Parsers"
-__description__ = (
+__description__ = '''
     "A comprehensive and high-performance parser designed to deconstruct and analyze "
     "Windows Portable Executable (PE) binaries. It provides reverse engineers and "
     "security researchers with deep visibility into the internal structures, memory "
     "layout, and execution dependencies of Windows executables."
-)
-__features__    = (
+'''
+__features__    = '''
     "• Comprehensive DOS Header & Rich Signature extraction\n"
     "• NT Headers (COFF File Header & Optional Header) analysis\n"
     "• Detailed Section Table parsing with entropy calculation\n"
@@ -31,7 +31,7 @@ __features__    = (
     "• Base Relocation Table & TLS Directory parsing\n"
     "• Resource Tree (Icon, Version Info, Manifest) extraction\n"
     "• Digital Signature & Security Directory validation"
-)
+'''
 __formats__     = ".exe, .dll, .sys, .ocx, .efi"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

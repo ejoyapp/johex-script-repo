@@ -17,16 +17,16 @@ __name__        = "RAR5 Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Archive Parsers"
-__description__ = (
+__description__ = '''
     "An advanced parser for the modern RAR5 archive format. Features a custom "
     "VINT (Variable Length Integer) decoding engine to seamlessly separate "
     "variable-length headers, metadata, and compressed file data blocks."
-)
-__features__    = (
+'''
+__features__    = '''
     "• VINT (Variable Length Integer) decoding engine\n"
     "• Header, metadata, and compressed data block isolation\n"
     "• RAR4 legacy signature detection"
-)
+'''
 __formats__     = ".rar, .rev"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

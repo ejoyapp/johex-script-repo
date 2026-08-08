@@ -17,16 +17,16 @@ __name__        = "PNG Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Media Parsers"
-__description__ = (
+__description__ = '''
     "A chunk-based parser for the lossless PNG image format. Validates the "
     "magic signature and iterates through all critical and ancillary chunks "
     "(IHDR, tEXt, IDAT, IEND) while visually isolating the Deflate-compressed image data."
-)
-__features__    = (
+'''
+__features__    = '''
     "• Magic signature validation\n"
     "• Critical and ancillary chunks (IHDR, tEXt, IDAT, IEND) iteration\n"
     "• Deflate-compressed image data isolation"
-)
+'''
 __formats__     = ".png"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

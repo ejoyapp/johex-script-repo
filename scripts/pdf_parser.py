@@ -17,17 +17,17 @@ __name__        = "PDF Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Document Parsers"
-__description__ = (
+__description__ = '''
     "A structural parser for Adobe's Portable Document Format. Identifies the "
     "file header, isolates raw binary streams, and maps the Cross-Reference (xref) "
     "table to provide FOA navigation to internal objects and the trailer."
-)
-__features__    = (
+'''
+__features__    = '''
     "• File header identification\n"
     "• Raw binary stream isolation\n"
     "• Cross-Reference (xref) table mapping\n"
     "• FOA navigation to internal objects and trailer"
-)
+'''
 __formats__     = ".pdf"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

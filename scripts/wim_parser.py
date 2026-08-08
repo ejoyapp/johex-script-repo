@@ -17,17 +17,17 @@ __name__        = "WIM Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Archive Parsers"
-__description__ = (
+__description__ = '''
     "A high-performance parser for modern Windows deployment images. "
     "Provides deep visibility into the WIM header, decodes 56-bit resource flags, "
     "and features one-click FOA routing to the Metadata XML and SHA-1 Lookup Tables."
-)
-__features__    = (
+'''
+__features__    = '''
     "• WIM Header parsing\n"
     "• 56-bit resource flags decoding\n"
     "• FOA routing to Metadata XML and SHA-1 Lookup Tables\n"
     "• LZMS/LZX/XPRESS compression detection"
-)
+'''
 __formats__     = ".wim, .esd, .swm"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

@@ -17,16 +17,16 @@ __name__        = "BMP Parser"
 __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Media Parsers"
-__description__ = (
+__description__ = '''
     "A structural parser for the uncompressed Windows Bitmap image format. "
     "Extracts the BITMAPFILEHEADER and BITMAPINFOHEADER, and maps exact physical "
     "offsets to the color palette and the raw pixel data array."
-)
-__features__    = (
+'''
+__features__    = '''
     "• BITMAPFILEHEADER and BITMAPINFOHEADER extraction\n"
     "• Physical offset mapping to color palette\n"
     "• Raw pixel data array isolation"
-)
+'''
 __formats__     = ".bmp, .dib"
 __copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
 __status__      = "Official / Built-in"

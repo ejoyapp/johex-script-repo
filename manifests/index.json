@@ -1,6 +1,6 @@
 {
   "repo_version": "1.1",
-  "last_updated": "2026-08-08T06:20:26Z",
+  "last_updated": "2026-08-08T12:34:20Z",
   "scripts": [
     {
       "id": "johex.parser.7z",
@@ -9,10 +9,10 @@
       "author": "EJoyApp Team",
       "category": "Archive Parsers",
       "description": "An advanced structural parser for the 7-Zip archive format. Decodes the Signature Header and provides precise FOA routing to the Next Header, seamlessly isolating complex LZMA/LZMA2 compressed streams.",
-      "features": "• Signature Header decoding\r\n• Precise FOA routing to Next Header\r\n• LZMA/LZMA2 compressed stream isolation\r\n• Encoded metadata property parsing",
+      "features": "• Signature Header decoding\\n\n• Precise FOA routing to Next Header\\n\n• LZMA/LZMA2 compressed stream isolation\\n\n• Encoded metadata property parsing",
       "formats": ".7z",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/7z_parser.py",
-      "file_hash": "11d1743e59abc5b5668f6d8ccdea797a827830ba1d31d35fcd1a121fe4a26637"
+      "file_hash": "3b07c27531a444fe1b34e1763f7ea21ec07105c7870cbf2ce70c4db9117c2d45"
     },
     {
       "id": "johex.parser.bmp",
@@ -21,10 +21,10 @@
       "author": "EJoyApp Team",
       "category": "Media Parsers",
       "description": "A structural parser for the uncompressed Windows Bitmap image format. Extracts the BITMAPFILEHEADER and BITMAPINFOHEADER, and maps exact physical offsets to the color palette and the raw pixel data array.",
-      "features": "• BITMAPFILEHEADER and BITMAPINFOHEADER extraction\r\n• Physical offset mapping to color palette\r\n• Raw pixel data array isolation",
+      "features": "• BITMAPFILEHEADER and BITMAPINFOHEADER extraction\\n\n• Physical offset mapping to color palette\\n\n• Raw pixel data array isolation",
       "formats": ".bmp, .dib",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/bmp_parser.py",
-      "file_hash": "2188d68a9b59a48e66332aa8ad9e86f0956578e3200e22dedbaed687236b7084"
+      "file_hash": "c38d31fc6fc3de24d99a7da7aa930ef7a02a3f21ba22d04eb0c7576279bc8d18"
     },
     {
       "id": "johex.parser.docx",
@@ -32,11 +32,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Document Parsers",
-      "description": "",
-      "features": "• ZIP structure extraction\r\n• Semantic isolation of document text, media, and malicious payloads\r\n• Embedded OLE object highlighting\r\n• Central Directory mapping",
+      "description": "A semantic parser for modern Microsoft Word documents (OOXML). Features regex-based boundary detection and color-coded structural analysis to instantly isolate document text, media, and potentially malicious payloads.",
+      "features": "• ZIP structure extraction\\n\n• Semantic isolation of document text, media, and malicious payloads\\n\n• Embedded OLE object highlighting\\n\n• Central Directory mapping",
       "formats": ".docx, .docm, .dotx",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/docx_parser.py",
-      "file_hash": "0338a59859537c5b7646eafc4f693b5376f62a0c18f6564627db6b0b1bbae426"
+      "file_hash": "85580c43b471e5c1e5364c70f4ea90194a8bc19757305a8203557a93f1587956"
     },
     {
       "id": "johex.parser.exfat",
@@ -45,10 +45,10 @@
       "author": "EJoyApp Team",
       "category": "File System Parsers",
       "description": "A modern parser tailored for high-capacity flash storage file systems. Decodes shift-based sector/cluster mathematics and provides direct FOA navigation to the FAT table and the continuous Cluster Heap data area.",
-      "features": "• Shift-based sector/cluster math decoding\r\n• Direct FOA navigation to FAT table\r\n• Continuous Cluster Heap data area mapping\r\n• ExFAT VBR parsing",
+      "features": "• Shift-based sector/cluster math decoding\\n\n• Direct FOA navigation to FAT table\\n\n• Continuous Cluster Heap data area mapping\\n\n• ExFAT VBR parsing",
       "formats": ".exfat, .img, .dd",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/exfat_parser.py",
-      "file_hash": "b44fd796e70952f032c6ac2c6d7434b483fea14dbc6f2f16460067fce960a24f"
+      "file_hash": "e07635d44876cf0c973be0610bfcc90144ffe18ac5c73eb9ed5296a44a1914df"
     },
     {
       "id": "johex.parser.ext4",
@@ -56,11 +56,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "File System Parsers",
-      "description": "A deep-dive parser for the standard Linux ext4 file system. ",
-      "features": "• 1024-byte Superblock exposure\r\n",
+      "description": "A deep-dive parser for the standard Linux ext4 file system. Exposes the 1024-byte Superblock, Block Group Descriptor Tables (BGDT), and performs bit-shift offset calculations to locate the Root Directory (Inode 2).",
+      "features": "• 1024-byte Superblock exposure\\n\n• Block Group Descriptor Tables (BGDT) parsing\\n\n• Bit-shift offset calculations\\n\n• Root Directory (Inode 2) FOA location",
       "formats": ".ext4, .img, .dd",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/ext4_parser.py",
-      "file_hash": "43cac6d8c0e42a821272950f596c91219a469044e7b90d498ffd7b15ebfbb003"
+      "file_hash": "df540a8561aab4a4694c040580749526bc3136aa73168da89408bcc36e318f8b"
     },
     {
       "id": "johex.parser.fat32",
@@ -68,11 +68,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "File System Parsers",
-      "description": "A structural parser for the classic FAT32 file system. Calculates exact ",
-      "features": "",
+      "description": "A structural parser for the classic FAT32 file system. Calculates exact physical offsets (FOA) for the Reserved Area, FSInfo sector, Allocation Tables (FAT1/FAT2), and the dynamic Root Directory cluster chain.",
+      "features": "• Exact physical offsets (FOA) calculation\\n\n• Reserved Area and FSInfo sector parsing\\n\n• Allocation Tables (FAT1/FAT2) mapping\\n\n• Dynamic Root Directory cluster chain navigation",
       "formats": ".fat, .img, .dd",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/fat32_parser.py",
-      "file_hash": "eb0108080c147e88fc2b57f25adc5497c8e36aafe52268f74064f22090ff471d"
+      "file_hash": "4f6a6eb0fb35162c88b115df5cde45406dea6c8865c54945437cead3bb99176d"
     },
     {
       "id": "johex.parser.ico",
@@ -81,10 +81,10 @@
       "author": "EJoyApp Team",
       "category": "Media Parsers",
       "description": "A precise parser for the Windows Icon resource format. Decodes the global ICONDIR header and provides one-click FOA routing from directory entries directly to the embedded BMP or PNG image payloads.",
-      "features": "• Global ICONDIR header decoding\r\n• Directory entries parsing\r\n• One-click FOA routing to embedded BMP or PNG payloads",
+      "features": "• Global ICONDIR header decoding\\n\n• Directory entries parsing\\n\n• One-click FOA routing to embedded BMP or PNG payloads",
       "formats": ".ico, .cur",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/ico_parser.py",
-      "file_hash": "ca713e31be1b92b89d8a38b8ca793aa24e708008696100118c33d0e546e2d2ab"
+      "file_hash": "06d3fec613ae6c2643a2e3aedd14cb72fc8b22d41500edbb306a0f8a3b00eb85"
     },
     {
       "id": "johex.parser.jpg",
@@ -92,11 +92,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Media Parsers",
-      "description": "A marker-based parser for the JPEG image format. Traverses the segment ",
-      "features": "• Segment chain traversal\r\n",
+      "description": "A marker-based parser for the JPEG image format. Traverses the segment chain to visually isolate APPn metadata (including EXIF), quantization tables (DQT), and the compressed entropy-coded image stream (SOS).",
+      "features": "• Segment chain traversal\\n\n• APPn metadata (including EXIF) isolation\\n\n• Quantization tables (DQT) highlighting\\n\n• Compressed entropy-coded image stream (SOS) isolation",
       "formats": ".jpg, .jpeg, .jfif",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/jpg_parser.py",
-      "file_hash": "9341e3dcfce8aa2c6329f9d52d74a6b5800b5c3e7463c7cd868afae44a646691"
+      "file_hash": "bcc2a22f55d57f04dc2aab8454219cd6dcea66f74e0379e5effd318c67e5fe9a"
     },
     {
       "id": "johex.parser.mp3",
@@ -104,11 +104,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Media Parsers",
-      "description": "A robust sequential parser for the MP3 audio format. Decodes ID3v1 and ",
-      "features": "• ID3v1 and ID3v2 metadata tag decoding\r\n",
+      "description": "A robust sequential parser for the MP3 audio format. Decodes ID3v1 and ID3v2 metadata tags, identifies VBR headers (Xing/Info), and visually isolates the continuous chain of MPEG audio frames.",
+      "features": "• ID3v1 and ID3v2 metadata tag decoding\\n\n• VBR header (Xing/Info) identification\\n\n• Continuous chain of MPEG audio frames isolation",
       "formats": ".mp3",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/mp3_parser.py",
-      "file_hash": "7ce63fefd3c26e1d1f9b2a35e5036f02e07181409bc6bdd261ec92b4412a8f76"
+      "file_hash": "08f741ae1eb0c19b19ba298827922dbc9b16fe2c38f83af44647f79cdb68ef1b"
     },
     {
       "id": "johex.parser.mp4",
@@ -117,10 +117,10 @@
       "author": "EJoyApp Team",
       "category": "Media Parsers",
       "description": "A hierarchical parser for the MP4 multimedia container. Recursively unwraps the Box/Atom architecture, providing deep visibility into the 'moov' metadata tree and instantly isolating the massive 'mdat' media payload.",
-      "features": "• Recursive Box/Atom architecture unwrapping\r\n• Deep visibility into the 'moov' metadata tree\r\n• 'mdat' media payload isolation",
+      "features": "• Recursive Box/Atom architecture unwrapping\\n\n• Deep visibility into the 'moov' metadata tree\\n\n• 'mdat' media payload isolation",
       "formats": ".mp4, .m4a, .m4v, .mov",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/mp4_parser.py",
-      "file_hash": "685cbf885446498fa17e53790ea9f3cb968fa3d9a66dca90d9486329f3449fc4"
+      "file_hash": "1970b5a05a54b78e393b78eeea3808965eff751036ad24d948729b34b8c3c9cb"
     },
     {
       "id": "johex.parser.ntfs",
@@ -128,11 +128,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "File System Parsers",
-      "description": "An industrial-grade forensic parser for raw NTFS volumes and disk images. ",
-      "features": "• Intelligent MBR/GPT partition routing\r\n",
+      "description": "An industrial-grade forensic parser for raw NTFS volumes and disk images. Features intelligent MBR/GPT partition routing, BIOS Parameter Block (BPB) decoding, and LCN-to-FOA translation for instant jumps to the Master File Table ($MFT).",
+      "features": "• Intelligent MBR/GPT partition routing\\n\n• BIOS Parameter Block (BPB) decoding\\n\n• LCN-to-FOA translation\\n\n• Instant jumps to the Master File Table ($MFT)",
       "formats": ".ntfs, .img, .dd, .vhd, .vhdx",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/ntfs_parser.py",
-      "file_hash": "791155f4a9a00d2424aee4764a71c9cd75fe4a14afe5e8d660eefe39407041ce"
+      "file_hash": "5131f41ba47959b7c3e83e6403728c63666bf98508c813cb0975146269ba496a"
     },
     {
       "id": "johex.parser.pdf",
@@ -140,11 +140,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Document Parsers",
-      "description": "A structural parser for Adobe's Portable Document Format. Identifies the ",
-      "features": "• File header identification\r\n• Raw binary stream isolation\r\n",
+      "description": "A structural parser for Adobe's Portable Document Format. Identifies the file header, isolates raw binary streams, and maps the Cross-Reference (xref) table to provide FOA navigation to internal objects and the trailer.",
+      "features": "• File header identification\\n\n• Raw binary stream isolation\\n\n• Cross-Reference (xref) table mapping\\n\n• FOA navigation to internal objects and trailer",
       "formats": ".pdf",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/pdf_parser.py",
-      "file_hash": "ed01d00f3d19d07f488c680baabb1d250abb73dfc7c94e1659ae391e16cf6919"
+      "file_hash": "5901599f28dba62d7921e86798951f3b8ea49396c2de74ee2f9daa00be64975d"
     },
     {
       "id": "johex.parser.pe",
@@ -152,11 +152,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "File Format Parsers",
-      "description": "A comprehensive and high-performance parser designed to deconstruct and analyze ",
-      "features": "• Comprehensive DOS Header & Rich Signature extraction\r\n",
+      "description": "A comprehensive and high-performance parser designed to deconstruct and analyze Windows Portable Executable (PE) binaries. It provides reverse engineers and security researchers with deep visibility into the internal structures, memory layout, and execution dependencies of Windows executables.",
+      "features": "• Comprehensive DOS Header & Rich Signature extraction\\n\n• NT Headers (COFF File Header & Optional Header) analysis\\n\n• Detailed Section Table parsing with entropy calculation\\n\n• Import Directory (IAT/INT) and Export Directory resolution\\n\n• Base Relocation Table & TLS Directory parsing\\n\n• Resource Tree (Icon, Version Info, Manifest) extraction\\n\n• Digital Signature & Security Directory validation",
       "formats": ".exe, .dll, .sys, .ocx, .efi",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/pe_parser.py",
-      "file_hash": "306773090fdae55b8273ae04bac51911b47bafef76d3c13b694c0b3e73e3e812"
+      "file_hash": "1503758161939e66aa95c6c9a540f354d65969094687e0902ca07ba35f888e9a"
     },
     {
       "id": "johex.parser.png",
@@ -164,11 +164,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Media Parsers",
-      "description": "A chunk-based parser for the lossless PNG image format. Validates the magic signature and iterates through all critical and ancillary chunks ",
-      "features": "• Magic signature validation\r\n",
+      "description": "A chunk-based parser for the lossless PNG image format. Validates the magic signature and iterates through all critical and ancillary chunks (IHDR, tEXt, IDAT, IEND) while visually isolating the Deflate-compressed image data.",
+      "features": "• Magic signature validation\\n\n• Critical and ancillary chunks (IHDR, tEXt, IDAT, IEND) iteration\\n\n• Deflate-compressed image data isolation",
       "formats": ".png",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/png_parser.py",
-      "file_hash": "5693dbe5028c9c4abc8c578e321a918a20491c289f02df0a4cd21ed9319f83df"
+      "file_hash": "0b77e397a1dc82d2470fb50bcce36f38f4bf1171c478ee56b9a8691f6f27e3f8"
     },
     {
       "id": "johex.parser.pptx",
@@ -176,11 +176,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Document Parsers",
-      "description": "",
-      "features": "• ZIP structure extraction\r\n• High-speed regex boundary scanning\r\n• Semantic color-coding for slides, media, and OLE objects\r\n• Central Directory to Local File Header FOA routing",
+      "description": "A semantic parser for modern Microsoft PowerPoint documents (OOXML). Leverages high-speed regex boundary scanning and FOA hyperlinking to expose internal ZIP structures, isolating slides, media, and embedded OLE objects.",
+      "features": "• ZIP structure extraction\\n\n• High-speed regex boundary scanning\\n\n• Semantic color-coding for slides, media, and OLE objects\\n\n• Central Directory to Local File Header FOA routing",
       "formats": ".pptx, .ppsx, .potx",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/pptx_parser.py",
-      "file_hash": "d3ee32430460417ca23da98a19d1196aad1cd63dce31df870972be93164d2e01"
+      "file_hash": "d9273d140be0c43ed242adfb519de7f006d9d83f55e3373c5673abcbbc53f0fe"
     },
     {
       "id": "johex.parser.rar",
@@ -188,11 +188,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Archive Parsers",
-      "description": "An advanced parser for the modern RAR5 archive format. Features a custom ",
-      "features": "",
+      "description": "An advanced parser for the modern RAR5 archive format. Features a custom VINT (Variable Length Integer) decoding engine to seamlessly separate variable-length headers, metadata, and compressed file data blocks.",
+      "features": "• VINT (Variable Length Integer) decoding engine\\n\n• Header, metadata, and compressed data block isolation\\n\n• RAR4 legacy signature detection",
       "formats": ".rar, .rev",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/rar_parser.py",
-      "file_hash": "fb43300ab843fe287ac3bd4d525ebd4ae0a14c87982864b6a2a9faba6618f5e3"
+      "file_hash": "22c90db9c269034e919d9b5bfde732edb4537d2df40ce2f7b041e671045fb9bf"
     },
     {
       "id": "johex.parser.vdi",
@@ -201,10 +201,10 @@
       "author": "EJoyApp Team",
       "category": "Virtual Disk Parsers",
       "description": "A structural parser for Oracle VM VirtualBox dynamic disk images. Analyzes the Pre-header and Main Header, separating virtual capacity from physical allocation, and provides jumps to the Block Map and raw sectors.",
-      "features": "• Pre-header and Main Header analysis\r\n• Virtual capacity vs physical allocation separation\r\n• Block Map translation table parsing\r\n• Raw sector FOA navigation",
+      "features": "• Pre-header and Main Header analysis\\n\n• Virtual capacity vs physical allocation separation\\n\n• Block Map translation table parsing\\n\n• Raw sector FOA navigation",
       "formats": ".vdi",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/vdi_parser.py",
-      "file_hash": "33b773487c09f42285bf74bcbef49ef75b8e98fc40614496e1dd9f1a60285572"
+      "file_hash": "9931d8b96c42a2f4ad45268a0b98e5a834b2862fa46cddf62b2b1de1cb841116"
     },
     {
       "id": "johex.parser.vmdk",
@@ -212,11 +212,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Virtual Disk Parsers",
-      "description": "A forensic parser for VMware monolithic sparse virtual disks. Extracts the embedded plaintext configuration descriptor and maps ",
-      "features": "• Embedded plaintext configuration descriptor extraction\r\n",
+      "description": "A forensic parser for VMware monolithic sparse virtual disks. Extracts the embedded plaintext configuration descriptor and maps the dual-layer Grain Directory (L1) and Grain Table (L2) paging structures.",
+      "features": "• Embedded plaintext configuration descriptor extraction\\n\n• Dual-layer Grain Directory (L1) and Grain Table (L2) mapping\\n\n• Sparse Header and capacity calculation\\n\n• Data grain isolation",
       "formats": ".vmdk",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/vmdk_parser.py",
-      "file_hash": "9d49fff3d6c6dba8b5c49913f4a87d6fc39fa037e994ccddd787cb03bb1269da"
+      "file_hash": "fd1cac39d889d2504a8c8397e6795528e8fc5bacd10b3326252d4b05e1f6da0b"
     },
     {
       "id": "johex.parser.wav",
@@ -225,10 +225,10 @@
       "author": "EJoyApp Team",
       "category": "Media Parsers",
       "description": "A chunk-based parser for the RIFF/WAV uncompressed audio format. Decodes the main RIFF header, analyzes the 'fmt ' audio specification block, and perfectly maps the boundaries of the raw PCM 'data' payload.",
-      "features": "• Main RIFF header decoding\r\n• 'fmt ' audio specification block analysis\r\n• Raw PCM 'data' payload boundary mapping",
+      "features": "• Main RIFF header decoding\\n\n• 'fmt ' audio specification block analysis\\n\n• Raw PCM 'data' payload boundary mapping",
       "formats": ".wav",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/wav_parser.py",
-      "file_hash": "e1aed1cfdd41d6513afec2be3916d6c1899b512a86161313305ae700f2d90cbd"
+      "file_hash": "3e23b062ad412832b9864bd205fce6dd680ff3eafe6cea175c42b15c2ee07564"
     },
     {
       "id": "johex.parser.wim",
@@ -237,10 +237,10 @@
       "author": "EJoyApp Team",
       "category": "Archive Parsers",
       "description": "A high-performance parser for modern Windows deployment images. Provides deep visibility into the WIM header, decodes 56-bit resource flags, and features one-click FOA routing to the Metadata XML and SHA-1 Lookup Tables.",
-      "features": "• WIM Header parsing\r\n• 56-bit resource flags decoding\r\n• FOA routing to Metadata XML and SHA-1 Lookup Tables\r\n• LZMS/LZX/XPRESS compression detection",
+      "features": "• WIM Header parsing\\n\n• 56-bit resource flags decoding\\n\n• FOA routing to Metadata XML and SHA-1 Lookup Tables\\n\n• LZMS/LZX/XPRESS compression detection",
       "formats": ".wim, .esd, .swm",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/wim_parser.py",
-      "file_hash": "f09771fe3e55af8ef8328b550d16045893554bafc2e4663f2b7c840e02c1d975"
+      "file_hash": "aa8a815dc9e3c138fea4fbdcebe4e092e7ecb622f2c355ac07af8b0bd27e7d3d"
     },
     {
       "id": "johex.parser.xlsx",
@@ -248,11 +248,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Document Parsers",
-      "description": "",
-      "features": "• ZIP structure extraction\r\n• SharedStrings table isolation\r\n• Worksheet and embedded macro vector highlighting\r\n• FOA jumps to raw XML streams",
+      "description": "A semantic parser for modern Microsoft Excel workbooks (OOXML). Provides deep visibility into the underlying ZIP structure, visually isolating shared string tables (SharedStrings), worksheets, and embedded macro vectors.",
+      "features": "• ZIP structure extraction\\n\n• SharedStrings table isolation\\n\n• Worksheet and embedded macro vector highlighting\\n\n• FOA jumps to raw XML streams",
       "formats": ".xlsx, .xlsm, .xltx",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/xlsx_parser.py",
-      "file_hash": "4e8be96626b6a25cba4ee33fbca08dbfe51580c374c85cc5c9899a3fcf8569ed"
+      "file_hash": "dd219846603ed619613aa5fe753cf643613bcdbc1a38bfc96ad8f60d48375dbf"
     },
     {
       "id": "johex.parser.zip",
@@ -260,11 +260,11 @@
       "version": "1.3.1",
       "author": "EJoyApp Team",
       "category": "Archive Parsers",
-      "description": "A high-performance structural parser for the standard ZIP archive format. Parses Local File Headers and provides reverse-engineered FOA routing from the ",
-      "features": "• Local File Headers parsing\r\n",
+      "description": "A high-performance structural parser for the standard ZIP archive format. Parses Local File Headers and provides reverse-engineered FOA routing from the End of Central Directory (EOCD) back to the Central Directory records.",
+      "features": "• Local File Headers parsing\\n\n• End of Central Directory (EOCD) to Central Directory reverse routing\\n\n• Compressed data isolation\\n\n• Regex-based boundary scanning",
       "formats": ".zip, .apk, .jar",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/zip_parser.py",
-      "file_hash": "67428084fe3396a6513119e53d595ccb5b1117e1627954cdbe57c52c7412f173"
+      "file_hash": "13449b17624f89ec689f8e382f1fa1054e6aa48a3c1ffd47838bf6a06b42c027"
     }
   ]
 }
