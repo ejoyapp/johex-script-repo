@@ -19,12 +19,12 @@ __author__      = "EJoyApp Team"
 __category__    = "Media Parsers"
 __description__ = '''
     "A robust sequential parser for the MP3 audio format. Decodes ID3v1 and "
-    "ID3v2 metadata tags, identifies VBR headers (Xing/Info), and visually "
-    "isolates the continuous chain of MPEG audio frames."
+    "ID3v2 metadata tags, identifies VBR headers (Xing/Info), "
+    "and visually isolates the continuous chain of MPEG audio frames."
 '''
 __features__    = '''
-    "• ID3v1 and ID3v2 metadata tag decoding\n"
-    "• VBR header (Xing/Info) identification\n"
+    "• ID3v1 and ID3v2 metadata tag decoding"
+    "• VBR header (Xing/Info) identification"
     "• Continuous chain of MPEG audio frames isolation"
 '''
 __formats__     = ".mp3"

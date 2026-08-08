@@ -23,9 +23,9 @@ __description__ = '''
     "navigation to the FAT table and the continuous Cluster Heap data area."
 '''
 __features__    = '''
-    "• Shift-based sector/cluster math decoding\n"
-    "• Direct FOA navigation to FAT table\n"
-    "• Continuous Cluster Heap data area mapping\n"
+    "• Shift-based sector/cluster math decoding"
+    "• Direct FOA navigation to FAT table"
+    "• Continuous Cluster Heap data area mapping"
     "• ExFAT VBR parsing"
 '''
 __formats__     = ".exfat, .img, .dd"

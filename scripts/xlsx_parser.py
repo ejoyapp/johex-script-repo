@@ -23,9 +23,9 @@ __description__ = '''
     "shared string tables (SharedStrings), worksheets, and embedded macro vectors."
 '''
 __features__    = '''
-    "• ZIP structure extraction\n"
-    "• SharedStrings table isolation\n"
-    "• Worksheet and embedded macro vector highlighting\n"
+    "• ZIP structure extraction"
+    "• SharedStrings table isolation"
+    "• Worksheet and embedded macro vector highlighting"
     "• FOA jumps to raw XML streams"
 '''
 __formats__     = ".xlsx, .xlsm, .xltx"

@@ -18,14 +18,14 @@ __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Archive Parsers"
 __description__ = '''
-    "An advanced structural parser for the 7-Zip archive format. Decodes the "
-    "Signature Header and provides precise FOA routing to the Next Header, "
+    "An advanced structural parser for the 7-Zip archive format."
+    "Decodes the Signature Header and provides precise FOA routing to the Next Header, "
     "seamlessly isolating complex LZMA/LZMA2 compressed streams."
 '''
 __features__    = '''
-    "• Signature Header decoding\n"
-    "• Precise FOA routing to Next Header\n"
-    "• LZMA/LZMA2 compressed stream isolation\n"
+    "• Signature Header decoding"
+    "• Precise FOA routing to Next Header"
+    "• LZMA/LZMA2 compressed stream isolation"
     "• Encoded metadata property parsing"
 '''
 __formats__     = ".7z"

@@ -23,8 +23,8 @@ __description__ = '''
     "the 'moov' metadata tree and instantly isolating the massive 'mdat' media payload."
 '''
 __features__    = '''
-    "• Recursive Box/Atom architecture unwrapping\n"
-    "• Deep visibility into the 'moov' metadata tree\n"
+    "• Recursive Box/Atom architecture unwrapping"
+    "• Deep visibility into the 'moov' metadata tree"
     "• 'mdat' media payload isolation"
 '''
 __formats__     = ".mp4, .m4a, .m4v, .mov"

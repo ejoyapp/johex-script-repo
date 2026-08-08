@@ -24,12 +24,12 @@ __description__ = '''
     "layout, and execution dependencies of Windows executables."
 '''
 __features__    = '''
-    "• Comprehensive DOS Header & Rich Signature extraction\n"
-    "• NT Headers (COFF File Header & Optional Header) analysis\n"
-    "• Detailed Section Table parsing with entropy calculation\n"
-    "• Import Directory (IAT/INT) and Export Directory resolution\n"
-    "• Base Relocation Table & TLS Directory parsing\n"
-    "• Resource Tree (Icon, Version Info, Manifest) extraction\n"
+    "• Comprehensive DOS Header & Rich Signature extraction"
+    "• NT Headers (COFF File Header & Optional Header) analysis"
+    "• Detailed Section Table parsing with entropy calculation"
+    "• Import Directory (IAT/INT) and Export Directory resolution"
+    "• Base Relocation Table & TLS Directory parsing"
+    "• Resource Tree (Icon, Version Info, Manifest) extraction"
     "• Digital Signature & Security Directory validation"
 '''
 __formats__     = ".exe, .dll, .sys, .ocx, .efi"

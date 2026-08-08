@@ -23,8 +23,8 @@ __description__ = '''
     "variable-length headers, metadata, and compressed file data blocks."
 '''
 __features__    = '''
-    "• VINT (Variable Length Integer) decoding engine\n"
-    "• Header, metadata, and compressed data block isolation\n"
+    "• VINT (Variable Length Integer) decoding engine"
+    "• Header, metadata, and compressed data block isolation"
     "• RAR4 legacy signature detection"
 '''
 __formats__     = ".rar, .rev"

@@ -19,13 +19,13 @@ __author__      = "EJoyApp Team"
 __category__    = "Media Parsers"
 __description__ = '''
     "A marker-based parser for the JPEG image format. Traverses the segment "
-    "chain to visually isolate APPn metadata (including EXIF), quantization "
-    "tables (DQT), and the compressed entropy-coded image stream (SOS)."
+    "chain to visually isolate APPn metadata (including EXIF), "
+    "quantization tables (DQT), and the compressed entropy-coded image stream (SOS)."
 '''
 __features__    = '''
-    "• Segment chain traversal\n"
-    "• APPn metadata (including EXIF) isolation\n"
-    "• Quantization tables (DQT) highlighting\n"
+    "• Segment chain traversal"
+    "• APPn metadata (including EXIF) isolation"
+    "• Quantization tables (DQT) highlighting"
     "• Compressed entropy-coded image stream (SOS) isolation"
 '''
 __formats__     = ".jpg, .jpeg, .jfif"

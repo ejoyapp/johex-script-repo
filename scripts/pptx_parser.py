@@ -23,9 +23,9 @@ __description__ = '''
     "expose internal ZIP structures, isolating slides, media, and embedded OLE objects."
 '''
 __features__    = '''
-    "• ZIP structure extraction\n"
-    "• High-speed regex boundary scanning\n"
-    "• Semantic color-coding for slides, media, and OLE objects\n"
+    "• ZIP structure extraction"
+    "• High-speed regex boundary scanning"
+    "• Semantic color-coding for slides, media, and OLE objects"
     "• Central Directory to Local File Header FOA routing"
 '''
 __formats__     = ".pptx, .ppsx, .potx"

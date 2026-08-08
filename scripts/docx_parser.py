@@ -18,14 +18,14 @@ __version__     = "1.3.1"
 __author__      = "EJoyApp Team"
 __category__    = "Document Parsers"
 __description__ = '''
-    "A semantic parser for modern Microsoft Word documents (OOXML). Features "
-    "regex-based boundary detection and color-coded structural analysis to "
+    "A semantic parser for modern Microsoft Word documents (OOXML). "
+    "Features regex-based boundary detection and color-coded structural analysis to "
     "instantly isolate document text, media, and potentially malicious payloads."
 '''
 __features__    = '''
-    "• ZIP structure extraction\n"
-    "• Semantic isolation of document text, media, and malicious payloads\n"
-    "• Embedded OLE object highlighting\n"
+    "• ZIP structure extraction"
+    "• Semantic isolation of document text, media, and malicious payloads"
+    "• Embedded OLE object highlighting"
     "• Central Directory mapping"
 '''
 __formats__     = ".docx, .docm, .dotx"

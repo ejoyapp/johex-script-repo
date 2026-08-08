@@ -23,9 +23,9 @@ __description__ = '''
     "and LCN-to-FOA translation for instant jumps to the Master File Table ($MFT)."
 '''
 __features__    = '''
-    "• Intelligent MBR/GPT partition routing\n"
-    "• BIOS Parameter Block (BPB) decoding\n"
-    "• LCN-to-FOA translation\n"
+    "• Intelligent MBR/GPT partition routing"
+    "• BIOS Parameter Block (BPB) decoding"
+    "• LCN-to-FOA translation"
     "• Instant jumps to the Master File Table ($MFT)"
 '''
 __formats__     = ".ntfs, .img, .dd, .vhd, .vhdx"

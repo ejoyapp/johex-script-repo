@@ -23,9 +23,9 @@ __description__ = '''
     "table to provide FOA navigation to internal objects and the trailer."
 '''
 __features__    = '''
-    "• File header identification\n"
-    "• Raw binary stream isolation\n"
-    "• Cross-Reference (xref) table mapping\n"
+    "• File header identification"
+    "• Raw binary stream isolation"
+    "• Cross-Reference (xref) table mapping"
     "• FOA navigation to internal objects and trailer"
 '''
 __formats__     = ".pdf"

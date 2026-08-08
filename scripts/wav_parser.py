@@ -23,8 +23,8 @@ __description__ = '''
     "and perfectly maps the boundaries of the raw PCM 'data' payload."
 '''
 __features__    = '''
-    "• Main RIFF header decoding\n"
-    "• 'fmt ' audio specification block analysis\n"
+    "• Main RIFF header decoding"
+    "• 'fmt ' audio specification block analysis"
     "• Raw PCM 'data' payload boundary mapping"
 '''
 __formats__     = ".wav"

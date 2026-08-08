@@ -23,9 +23,9 @@ __description__ = '''
     "and features one-click FOA routing to the Metadata XML and SHA-1 Lookup Tables."
 '''
 __features__    = '''
-    "• WIM Header parsing\n"
-    "• 56-bit resource flags decoding\n"
-    "• FOA routing to Metadata XML and SHA-1 Lookup Tables\n"
+    "• WIM Header parsing"
+    "• 56-bit resource flags decoding"
+    "• FOA routing to Metadata XML and SHA-1 Lookup Tables"
     "• LZMS/LZX/XPRESS compression detection"
 '''
 __formats__     = ".wim, .esd, .swm"

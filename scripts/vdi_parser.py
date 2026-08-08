@@ -23,9 +23,9 @@ __description__ = '''
         "from physical allocation, and provides jumps to the Block Map and raw sectors."
 '''
 __features__    = '''
-        "• Pre-header and Main Header analysis\n"
-        "• Virtual capacity vs physical allocation separation\n"
-        "• Block Map translation table parsing\n"
+        "• Pre-header and Main Header analysis"
+        "• Virtual capacity vs physical allocation separation"
+        "• Block Map translation table parsing"
         "• Raw sector FOA navigation"
 '''
 __formats__     = ".vdi"

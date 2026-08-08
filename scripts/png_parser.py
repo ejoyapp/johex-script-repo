@@ -23,8 +23,8 @@ __description__ = '''
     "(IHDR, tEXt, IDAT, IEND) while visually isolating the Deflate-compressed image data."
 '''
 __features__    = '''
-    "• Magic signature validation\n"
-    "• Critical and ancillary chunks (IHDR, tEXt, IDAT, IEND) iteration\n"
+    "• Magic signature validation"
+    "• Critical and ancillary chunks (IHDR, tEXt, IDAT, IEND) iteration"
     "• Deflate-compressed image data isolation"
 '''
 __formats__     = ".png"

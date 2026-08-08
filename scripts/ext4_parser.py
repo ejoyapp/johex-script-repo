@@ -23,9 +23,9 @@ __description__ = '''
     "and performs bit-shift offset calculations to locate the Root Directory (Inode 2)."
 '''
 __features__    = '''
-    "• 1024-byte Superblock exposure\n"
-    "• Block Group Descriptor Tables (BGDT) parsing\n"
-    "• Bit-shift offset calculations\n"
+    "• 1024-byte Superblock exposure"
+    "• Block Group Descriptor Tables (BGDT) parsing"
+    "• Bit-shift offset calculations"
     "• Root Directory (Inode 2) FOA location"
 '''
 __formats__     = ".ext4, .img, .dd"

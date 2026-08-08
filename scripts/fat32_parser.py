@@ -19,13 +19,13 @@ __author__      = "EJoyApp Team"
 __category__    = "File System Parsers"
 __description__ = '''
     "A structural parser for the classic FAT32 file system. Calculates exact "
-    "physical offsets (FOA) for the Reserved Area, FSInfo sector, Allocation "
-    "Tables (FAT1/FAT2), and the dynamic Root Directory cluster chain."
+    "physical offsets (FOA) for the Reserved Area, FSInfo sector, "
+    "Allocation Tables (FAT1/FAT2), and the dynamic Root Directory cluster chain."
 '''
 __features__    = '''
-    "• Exact physical offsets (FOA) calculation\n"
-    "• Reserved Area and FSInfo sector parsing\n"
-    "• Allocation Tables (FAT1/FAT2) mapping\n"
+    "• Exact physical offsets (FOA) calculation"
+    "• Reserved Area and FSInfo sector parsing"
+    "• Allocation Tables (FAT1/FAT2) mapping"
     "• Dynamic Root Directory cluster chain navigation"
 '''
 __formats__     = ".fat, .img, .dd"

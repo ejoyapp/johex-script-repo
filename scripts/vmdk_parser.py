@@ -23,9 +23,9 @@ __description__ = '''
     "the dual-layer Grain Directory (L1) and Grain Table (L2) paging structures."
 '''
 __features__    = '''
-    "• Embedded plaintext configuration descriptor extraction\n"
-    "• Dual-layer Grain Directory (L1) and Grain Table (L2) mapping\n"
-    "• Sparse Header and capacity calculation\n"
+    "• Embedded plaintext configuration descriptor extraction"
+    "• Dual-layer Grain Directory (L1) and Grain Table (L2) mapping"
+    "• Sparse Header and capacity calculation"
     "• Data grain isolation"
 '''
 __formats__     = ".vmdk"

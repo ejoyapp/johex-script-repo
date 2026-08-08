@@ -23,8 +23,8 @@ __description__ = '''
     "directory entries directly to the embedded BMP or PNG image payloads."
 '''
 __features__    = '''
-    "• Global ICONDIR header decoding\n"
-    "• Directory entries parsing\n"
+    "• Global ICONDIR header decoding"
+    "• Directory entries parsing"
     "• One-click FOA routing to embedded BMP or PNG payloads"
 '''
 __formats__     = ".ico, .cur"
