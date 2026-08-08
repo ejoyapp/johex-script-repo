@@ -1,5 +1,3 @@
-# pdf_parser.py
-
 """
 JoHex Official Script: Portable Document Format (PDF) Parser
 ============================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.pdf"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.pdf"
+__name__        = "PDF Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Document Parsers"
+__description__ = (
+    "A structural parser for Adobe's Portable Document Format. Identifies the "
+    "file header, isolates raw binary streams, and maps the Cross-Reference (xref) "
+    "table to provide FOA navigation to internal objects and the trailer."
+)
+__features__    = (
+    "• File header identification\n"
+    "• Raw binary stream isolation\n"
+    "• Cross-Reference (xref) table mapping\n"
+    "• FOA navigation to internal objects and trailer"
+)
+__formats__     = ".pdf"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import re

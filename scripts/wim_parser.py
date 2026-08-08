@@ -1,5 +1,3 @@
-# wim_parser.py
-
 """
 JoHex Official Script: Windows Imaging Format (WIM) Parser
 ==========================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.wim"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.wim"
+__name__        = "WIM Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Archive Parsers"
+__description__ = (
+    "A high-performance parser for modern Windows deployment images. "
+    "Provides deep visibility into the WIM header, decodes 56-bit resource flags, "
+    "and features one-click FOA routing to the Metadata XML and SHA-1 Lookup Tables."
+)
+__features__    = (
+    "• WIM Header parsing\n"
+    "• 56-bit resource flags decoding\n"
+    "• FOA routing to Metadata XML and SHA-1 Lookup Tables\n"
+    "• LZMS/LZX/XPRESS compression detection"
+)
+__formats__     = ".wim, .esd, .swm"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

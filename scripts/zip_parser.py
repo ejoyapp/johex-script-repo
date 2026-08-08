@@ -1,5 +1,3 @@
-# zip_parser.py
-
 """
 JoHex Official Script: ZIP Archive Parser
 =========================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.zip"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.zip"
+__name__        = "ZIP Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Archive Parsers"
+__description__ = (
+    "A high-performance structural parser for the standard ZIP archive format. "
+    "Parses Local File Headers and provides reverse-engineered FOA routing from the "
+    "End of Central Directory (EOCD) back to the Central Directory records."
+)
+__features__    = (
+    "• Local File Headers parsing\n"
+    "• End of Central Directory (EOCD) to Central Directory reverse routing\n"
+    "• Compressed data isolation\n"
+    "• Regex-based boundary scanning"
+)
+__formats__     = ".zip, .apk, .jar"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

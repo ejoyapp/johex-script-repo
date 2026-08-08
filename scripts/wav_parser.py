@@ -1,5 +1,3 @@
-# wav_parser.py
-
 """
 JoHex Official Script: Waveform Audio File Format (WAV) Parser
 ==============================================================
@@ -11,11 +9,28 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.wav"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.wav"
+__name__        = "WAV Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Media Parsers"
+__description__ = (
+    "A chunk-based parser for the RIFF/WAV uncompressed audio format. "
+    "Decodes the main RIFF header, analyzes the 'fmt ' audio specification block, "
+    "and perfectly maps the boundaries of the raw PCM 'data' payload."
+)
+__features__    = (
+    "• Main RIFF header decoding\n"
+    "• 'fmt ' audio specification block analysis\n"
+    "• Raw PCM 'data' payload boundary mapping"
+)
+__formats__     = ".wav"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

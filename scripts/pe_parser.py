@@ -1,5 +1,3 @@
-# pe_parser.py
-
 """
 JoHex Official Script: Portable Executable (PE) Parser
 ======================================================
@@ -11,11 +9,33 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.pe"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.pe"
+__name__        = "PE Parser"
+__version__     = "1.3.0"
+__author__      = "EJoyApp Team"
+__category__    = "File Format Parsers"
+__description__ = (
+    "A comprehensive and high-performance parser designed to deconstruct and analyze "
+    "Windows Portable Executable (PE) binaries. It provides reverse engineers and "
+    "security researchers with deep visibility into the internal structures, memory "
+    "layout, and execution dependencies of Windows executables."
+)
+__features__    = (
+    "• Comprehensive DOS Header & Rich Signature extraction\n"
+    "• NT Headers (COFF File Header & Optional Header) analysis\n"
+    "• Detailed Section Table parsing with entropy calculation\n"
+    "• Import Directory (IAT/INT) and Export Directory resolution\n"
+    "• Base Relocation Table & TLS Directory parsing\n"
+    "• Resource Tree (Icon, Version Info, Manifest) extraction\n"
+    "• Digital Signature & Security Directory validation"
+)
+__formats__     = ".exe, .dll, .sys, .ocx, .efi"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

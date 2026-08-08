@@ -1,5 +1,3 @@
-# mp4_parser.py
-
 """
 JoHex Official Script: MPEG-4 Part 14 (MP4 / ISOBMFF) Parser
 ============================================================
@@ -11,11 +9,28 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.mp4"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.mp4"
+__name__        = "MP4 Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Media Parsers"
+__description__ = (
+    "A hierarchical parser for the MP4 multimedia container. "
+    "Recursively unwraps the Box/Atom architecture, providing deep visibility into "
+    "the 'moov' metadata tree and instantly isolating the massive 'mdat' media payload."
+)
+__features__    = (
+    "• Recursive Box/Atom architecture unwrapping\n"
+    "• Deep visibility into the 'moov' metadata tree\n"
+    "• 'mdat' media payload isolation"
+)
+__formats__     = ".mp4, .m4a, .m4v, .mov"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

@@ -1,5 +1,3 @@
-# docx_parser.py
-
 """
 JoHex Official Script: Word Open XML (DOCX) Parser
 ==================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.docx"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.docx"
+__name__        = "DOCX Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Document Parsers"
+__description__ = (
+    "A semantic parser for modern Microsoft Word documents (OOXML). Features "
+    "regex-based boundary detection and color-coded structural analysis to "
+    "instantly isolate document text, media, and potentially malicious payloads."
+)
+__features__    = (
+    "• ZIP structure extraction\n"
+    "• Semantic isolation of document text, media, and malicious payloads\n"
+    "• Embedded OLE object highlighting\n"
+    "• Central Directory mapping"
+)
+__formats__     = ".docx, .docm, .dotx"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import re

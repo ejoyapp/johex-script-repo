@@ -1,5 +1,3 @@
-# mp3_parser.py
-
 """
 JoHex Official Script: MPEG Audio Layer III (MP3) Parser
 ========================================================
@@ -11,11 +9,28 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.mp3"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.mp3"
+__name__        = "MP3 Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Media Parsers"
+__description__ = (
+    "A robust sequential parser for the MP3 audio format. Decodes ID3v1 and "
+    "ID3v2 metadata tags, identifies VBR headers (Xing/Info), and visually "
+    "isolates the continuous chain of MPEG audio frames."
+)
+__features__    = (
+    "• ID3v1 and ID3v2 metadata tag decoding\n"
+    "• VBR header (Xing/Info) identification\n"
+    "• Continuous chain of MPEG audio frames isolation"
+)
+__formats__     = ".mp3"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

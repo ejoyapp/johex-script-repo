@@ -1,5 +1,3 @@
-# jpg_parser.py
-
 """
 JoHex Official Script: Joint Photographic Experts Group (JPEG) Parser
 =====================================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.jpg"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.jpg"
+__name__        = "JPEG Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Media Parsers"
+__description__ = (
+    "A marker-based parser for the JPEG image format. Traverses the segment "
+    "chain to visually isolate APPn metadata (including EXIF), quantization "
+    "tables (DQT), and the compressed entropy-coded image stream (SOS)."
+)
+__features__    = (
+    "• Segment chain traversal\n"
+    "• APPn metadata (including EXIF) isolation\n"
+    "• Quantization tables (DQT) highlighting\n"
+    "• Compressed entropy-coded image stream (SOS) isolation"
+)
+__formats__     = ".jpg, .jpeg, .jfif"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

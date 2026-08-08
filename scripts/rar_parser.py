@@ -1,5 +1,3 @@
-# rar_parser.py
-
 """
 JoHex Official Script: Roshal Archive (RAR5) Parser
 ===================================================
@@ -11,11 +9,28 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.rar"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.rar"
+__name__        = "RAR5 Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Archive Parsers"
+__description__ = (
+    "An advanced parser for the modern RAR5 archive format. Features a custom "
+    "VINT (Variable Length Integer) decoding engine to seamlessly separate "
+    "variable-length headers, metadata, and compressed file data blocks."
+)
+__features__    = (
+    "• VINT (Variable Length Integer) decoding engine\n"
+    "• Header, metadata, and compressed data block isolation\n"
+    "• RAR4 legacy signature detection"
+)
+__formats__     = ".rar, .rev"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

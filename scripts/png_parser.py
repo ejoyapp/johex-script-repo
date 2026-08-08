@@ -1,5 +1,3 @@
-# png_parser.py
-
 """
 JoHex Official Script: Portable Network Graphics (PNG) Parser
 =============================================================
@@ -11,11 +9,28 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.png"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.png"
+__name__        = "PNG Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Media Parsers"
+__description__ = (
+    "A chunk-based parser for the lossless PNG image format. Validates the "
+    "magic signature and iterates through all critical and ancillary chunks "
+    "(IHDR, tEXt, IDAT, IEND) while visually isolating the Deflate-compressed image data."
+)
+__features__    = (
+    "• Magic signature validation\n"
+    "• Critical and ancillary chunks (IHDR, tEXt, IDAT, IEND) iteration\n"
+    "• Deflate-compressed image data isolation"
+)
+__formats__     = ".png"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

@@ -1,5 +1,3 @@
-# icon_parser.py
-
 """
 JoHex Official Script: Windows Icon (ICO) Parser
 ================================================
@@ -11,11 +9,28 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.ico"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.ico"
+__name__        = "ICO Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Media Parsers"
+__description__ = (
+    "A precise parser for the Windows Icon resource format. "
+    "Decodes the global ICONDIR header and provides one-click FOA routing from "
+    "directory entries directly to the embedded BMP or PNG image payloads."
+)
+__features__    = (
+    "• Global ICONDIR header decoding\n"
+    "• Directory entries parsing\n"
+    "• One-click FOA routing to embedded BMP or PNG payloads"
+)
+__formats__     = ".ico, .cur"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

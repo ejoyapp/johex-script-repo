@@ -1,5 +1,3 @@
-# exfat_parser.py
-
 """
 JoHex Official Script: Extensible File Allocation Table (ExFAT) Parser
 ======================================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.exfat"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.exfat"
+__name__        = "ExFAT Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "File System Parsers"
+__description__ = (
+    "A modern parser tailored for high-capacity flash storage file systems. "
+    "Decodes shift-based sector/cluster mathematics and provides direct FOA "
+    "navigation to the FAT table and the continuous Cluster Heap data area."
+)
+__features__    = (
+    "• Shift-based sector/cluster math decoding\n"
+    "• Direct FOA navigation to FAT table\n"
+    "• Continuous Cluster Heap data area mapping\n"
+    "• ExFAT VBR parsing"
+)
+__formats__     = ".exfat, .img, .dd"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

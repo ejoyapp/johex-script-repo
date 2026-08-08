@@ -1,5 +1,3 @@
-# vdi_parser.py
-
 """
 JoHex Official Script: VirtualBox Disk Image (VDI) Parser
 =========================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.vdi"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.vdi"
+__name__        = "VDI Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Virtual Disk Parsers"
+__description__ = (
+        "A structural parser for Oracle VM VirtualBox dynamic disk images. "
+        "Analyzes the Pre-header and Main Header, separating virtual capacity "
+        "from physical allocation, and provides jumps to the Block Map and raw sectors."
+)
+__features__    = (
+        "• Pre-header and Main Header analysis\n"
+        "• Virtual capacity vs physical allocation separation\n"
+        "• Block Map translation table parsing\n"
+        "• Raw sector FOA navigation"
+)
+__formats__     = ".vdi"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

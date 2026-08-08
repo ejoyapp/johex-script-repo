@@ -1,5 +1,3 @@
-# ntfs_parser.py
-
 """
 JoHex Official Script: New Technology File System (NTFS) Parser
 ===============================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.ntfs"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.ntfs"
+__name__        = "NTFS Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "File System Parsers"
+__description__ = (
+    "An industrial-grade forensic parser for raw NTFS volumes and disk images. "
+    "Features intelligent MBR/GPT partition routing, BIOS Parameter Block (BPB) decoding, "
+    "and LCN-to-FOA translation for instant jumps to the Master File Table ($MFT)."
+)
+__features__    = (
+    "• Intelligent MBR/GPT partition routing\n"
+    "• BIOS Parameter Block (BPB) decoding\n"
+    "• LCN-to-FOA translation\n"
+    "• Instant jumps to the Master File Table ($MFT)"
+)
+__formats__     = ".ntfs, .img, .dd, .vhd, .vhdx"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import hexedit as hx
 import struct

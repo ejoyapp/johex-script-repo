@@ -1,5 +1,3 @@
-# bmp_parser.py
-
 """
 JoHex Official Script: Windows Bitmap (BMP) Parser
 ==================================================
@@ -11,11 +9,28 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.bmp"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.bmp"
+__name__        = "BMP Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Media Parsers"
+__description__ = (
+    "A structural parser for the uncompressed Windows Bitmap image format. "
+    "Extracts the BITMAPFILEHEADER and BITMAPINFOHEADER, and maps exact physical "
+    "offsets to the color palette and the raw pixel data array."
+)
+__features__    = (
+    "• BITMAPFILEHEADER and BITMAPINFOHEADER extraction\n"
+    "• Physical offset mapping to color palette\n"
+    "• Raw pixel data array isolation"
+)
+__formats__     = ".bmp, .dib"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

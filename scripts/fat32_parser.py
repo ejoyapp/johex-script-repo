@@ -1,5 +1,3 @@
-# fat32_parser.py
-
 """
 JoHex Official Script: File Allocation Table 32 (FAT32) Parser
 ==============================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.fat32"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.fat32"
+__name__        = "FAT32 Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "File System Parsers"
+__description__ = (
+    "A structural parser for the classic FAT32 file system. Calculates exact "
+    "physical offsets (FOA) for the Reserved Area, FSInfo sector, Allocation "
+    "Tables (FAT1/FAT2), and the dynamic Root Directory cluster chain."
+)
+__features__    = (
+    "• Exact physical offsets (FOA) calculation\n"
+    "• Reserved Area and FSInfo sector parsing\n"
+    "• Allocation Tables (FAT1/FAT2) mapping\n"
+    "• Dynamic Root Directory cluster chain navigation"
+)
+__formats__     = ".fat, .img, .dd"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import struct

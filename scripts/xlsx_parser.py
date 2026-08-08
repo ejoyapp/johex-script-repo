@@ -1,5 +1,3 @@
-# xlsx_parser.py
-
 """
 JoHex Official Script: Excel Open XML (XLSX) Parser
 ===================================================
@@ -11,11 +9,29 @@ This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
 """
 
-__module_id__  = "johex.parser.xlsx"
-__version__    = "1.3.0"
-__author__     = "EJoyApp Team"
-__copyright__  = "Copyright (c) 2026 EJoyApp. All rights reserved."
-__status__     = "Official / Built-in"
+# =================================================================
+# Manifest Metadata (Used for auto-generating manifest.json)
+# =================================================================
+__id__          = "johex.parser.xlsx"
+__name__        = "XLSX Parser"
+__version__     = "1.0.0"
+__author__      = "EJoyApp Team"
+__category__    = "Document Parsers"
+__description__ = (
+    "A semantic parser for modern Microsoft Excel workbooks (OOXML). "
+    "Provides deep visibility into the underlying ZIP structure, visually isolating "
+    "shared string tables (SharedStrings), worksheets, and embedded macro vectors."
+)
+__features__    = (
+    "• ZIP structure extraction\n"
+    "• SharedStrings table isolation\n"
+    "• Worksheet and embedded macro vector highlighting\n"
+    "• FOA jumps to raw XML streams"
+)
+__formats__     = ".xlsx, .xlsm, .xltx"
+__copyright__   = "Copyright (c) 2026 EJoyApp. All rights reserved."
+__status__      = "Official / Built-in"
+# =================================================================
 
 import johexedit as hx
 import re
