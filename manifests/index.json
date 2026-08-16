@@ -1,6 +1,6 @@
 {
   "repo_version": "1.1",
-  "last_updated": "2026-08-08T12:49:23Z",
+  "last_updated": "2026-08-16T07:46:27Z",
   "scripts": [
     {
       "id": "johex.parser.7z",
@@ -132,7 +132,7 @@
       "features": "• Intelligent MBR/GPT partition routing\r\n• BIOS Parameter Block (BPB) decoding\r\n• LCN-to-FOA translation\r\n• Instant jumps to the Master File Table ($MFT)",
       "formats": ".ntfs, .img, .dd, .vhd, .vhdx",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/ntfs_parser.py",
-      "file_hash": "20aa91139653f4f864163f088fcc0dea44ba9d59f1c83dba5f41bbe98e2989a8"
+      "file_hash": "f97975ddbde6f850a46af8739aa4c41c48d79cddbf56ba76a4cabf545aa93a2b"
     },
     {
       "id": "johex.parser.pdf",
