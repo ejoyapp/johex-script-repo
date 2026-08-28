@@ -66,17 +66,12 @@ def parse(r, root):
     # 1. Parse VMDK Sparse Header
     # =========================================================
     with root.struct("VMDK Sparse Header", color=hx.BLUE) as hdr:
-        hdr.bytes("Magic Number", 4, color=hx.YELLOW, fmt=lambda v: v.decode('ascii') + " (VMware Disk)")
+        hdr.bytes("Magic Number", 4, color=hx.YELLOW)
         version = hdr.u32("Version", color=hx.CYAN)
-        hdr.u32("Flags", fmt=lambda v: f"0x{v:08X}")
+        hdr.u32("Flags")
         
-        capacity_sectors = hdr.u64("Capacity (in sectors)", color=hx.RED)
-        capacity_bytes = capacity_sectors * SECTOR_SIZE
-        hdr.u64("Capacity (Decoded)", fmt=lambda v, c=capacity_bytes: f"{c} bytes ({c / (1024**3):.2f} GB)")
-        
-        grain_sectors = hdr.u64("Grain Size (in sectors)", color=hx.RED)
-        grain_bytes = grain_sectors * SECTOR_SIZE
-        hdr.u64("Grain Size (Decoded)", fmt=lambda v, g=grain_bytes: f"{g} bytes ({g / 1024:.0f} KB)")
+        capacity_sectors = hdr.u64("Capacity (in sectors)")
+        grain_sectors = hdr.u64("Grain Size (in sectors)")
         
         desc_offset_sec = hdr.u64("Descriptor Offset", color=hx.YELLOW)
         desc_size_sec = hdr.u64("Descriptor Size")
@@ -85,32 +80,26 @@ def parse(r, root):
         gd_offset_sec = hdr.u64("Grain Directory Offset", color=hx.YELLOW)
         overhead_sec = hdr.u64("Overhead Size")
         
-        hdr.u8("Unclean Shutdown", color=hx.PURPLE, fmt=lambda v: "YES (Needs Check)" if v else "NO (Clean)")
-        hdr.bytes("Newline Characters", 4, color=hx.GRAY, fmt=lambda v: repr(v))
+        hdr.u8("Unclean Shutdown")
+        hdr.bytes("Newline Characters", 4)
         comp_alg = hdr.u16("Compression Algorithm", fmt=lambda v: "1 (Deflate)" if v == 1 else "0 (None)")
         hdr.region("Padding", hdr.tell(), 433, color=hx.GRAY)
 
-    # =========================================================
-    # 2. Core FOA Calculation
-    # =========================================================
     desc_foa = desc_offset_sec * SECTOR_SIZE
     desc_size_bytes = desc_size_sec * SECTOR_SIZE
     gd_foa = gd_offset_sec * SECTOR_SIZE
     data_foa = overhead_sec * SECTOR_SIZE
 
-    # =========================================================
-    # 3. Parse & Tag the embedded plaintext descriptor
-    # =========================================================
     if 0 < desc_foa < file_size and desc_size_bytes > 0:
         with root.struct("Embedded Text Descriptor", color=hx.GREEN) as desc_node:
             desc_node.seek(desc_foa)
             try:
                 desc_node.region(f"[EXTRACT:raw]vmdk_descriptor.txt", desc_foa, desc_size_bytes, color=hx.CYAN)
             except Exception:
-                desc_node.region("Raw Descriptor Data", desc_foa, desc_size_bytes, color=hx.GRAY)
+                pass
 
     # =========================================================
-    # 4. Unified Robust Heuristic Carving (Block Scanning)
+    # 2. Unified Robust Heuristic Carving (Deep Scan + Deduplication)
     # =========================================================
     if 0 < data_foa < file_size:
         if comp_alg == 1:
@@ -118,128 +107,84 @@ def parse(r, root):
                 carve_node.region("VMDK is compressed (Deflate). Raw scanning disabled.", data_foa, file_size - data_foa, color=hx.GRAY)
         else:
             with root.struct("Embedded Android/Linux Images (Extracted)", color=hx.ORANGE) as carve_node:
-                
-                chunk_size = 16 * 1024 * 1024 
+                chunk_size = 16 * 1024 * 1024
                 overlap = 4096
                 cursor = data_foa
                 img_count = 0
-                found_offsets = set()
+                
+                found_types = set()
+
+                def add_extract(name, abs_offset, type_key):
+                    nonlocal img_count
+                    if type_key in found_types: return
+                    found_types.add(type_key)
+                    
+                    extract_size = file_size - abs_offset
+                    carve_node.region(f"[EXTRACT:raw]{name}_{img_count}.img", abs_offset, extract_size, color=hx.RED)
+                    img_count += 1
 
                 while cursor < file_size:
                     read_size = min(chunk_size + overlap, file_size - cursor)
                     chunk = r.read(cursor, read_size)
                     if not chunk: break
 
-                    # 1. Android Sparse Image (0xED26FF3A)
-                    idx = 0
-                    while True:
-                        idx = chunk.find(b"\x3A\xFF\x26\xED", idx)
-                        if idx == -1: break
-                        abs_start = cursor + idx
-                        if abs_start not in found_offsets:
-                            found_offsets.add(abs_start)
-                            carve_node.region(f"[EXTRACT:raw]android_sparse_{img_count}.img", abs_start, file_size - abs_start, color=hx.RED)
-                            img_count += 1
-                        idx += 4
+                    # 1. Android Sparse Image
+                    if "sparse" not in found_types:
+                        idx = chunk.find(b"\x3A\xFF\x26\xED")
+                        if idx != -1: add_extract("android_sparse", cursor + idx, "sparse")
 
                     # 2. Modern Android EROFS (\xE2\xE1\xF5\xE0 at 0x400)
-                    idx = 0
-                    while True:
-                        idx = chunk.find(b"\xE2\xE1\xF5\xE0", idx)
-                        if idx == -1: break
-                        part_start = cursor + idx - 0x400
-                        if part_start >= data_foa and part_start % 512 == 0 and part_start not in found_offsets:
-                            found_offsets.add(part_start)
-                            carve_node.region(f"[EXTRACT:raw]android_erofs_{img_count}.img", part_start, file_size - part_start, color=hx.RED)
-                            img_count += 1
-                        idx += 4
+                    if "erofs" not in found_types:
+                        idx = chunk.find(b"\xE2\xE1\xF5\xE0")
+                        if idx != -1 and idx >= 0x400: add_extract("android_erofs", cursor + idx - 0x400, "erofs")
 
                     # 3. Modern Android F2FS (\x10\x20\xF5\xF2 at 0x400)
-                    idx = 0
-                    while True:
-                        idx = chunk.find(b"\x10\x20\xF5\xF2", idx)
-                        if idx == -1: break
-                        part_start = cursor + idx - 0x400
-                        if part_start >= data_foa and part_start % 512 == 0 and part_start not in found_offsets:
-                            found_offsets.add(part_start)
-                            carve_node.region(f"[EXTRACT:raw]android_f2fs_{img_count}.img", part_start, file_size - part_start, color=hx.RED)
-                            img_count += 1
-                        idx += 4
+                    if "f2fs" not in found_types:
+                        idx = chunk.find(b"\x10\x20\xF5\xF2")
+                        if idx != -1 and idx >= 0x400: add_extract("android_f2fs_data", cursor + idx - 0x400, "f2fs")
 
                     # 4. Legacy Ext4 (\x53\xEF at 0x438)
-                    idx = 0
-                    while True:
-                        idx = chunk.find(b"\x53\xEF", idx)
-                        if idx == -1: break
-                        part_start = cursor + idx - 0x438
-                        if part_start >= data_foa and part_start % 512 == 0 and part_start not in found_offsets:
-                            found_offsets.add(part_start)
-                            carve_node.region(f"[EXTRACT:raw]android_ext4_{img_count}.img", part_start, file_size - part_start, color=hx.RED)
-                            img_count += 1
-                        idx += 2
+                    if "ext4" not in found_types:
+                        idx = chunk.find(b"\x53\xEF")
+                        if idx != -1 and idx >= 0x438: add_extract("android_ext4", cursor + idx - 0x438, "ext4")
 
-                    # 5. Android Boot (ANDROID!)
-                    idx = 0
-                    while True:
-                        idx = chunk.find(b"ANDROID!", idx)
-                        if idx == -1: break
-                        abs_start = cursor + idx
-                        if abs_start >= data_foa and abs_start not in found_offsets:
-                            found_offsets.add(abs_start)
-                            carve_node.region(f"[EXTRACT:raw]android_boot_{img_count}.img", abs_start, file_size - abs_start, color=hx.RED)
-                            img_count += 1
-                        idx += 8
+                    # 5. Android Boot
+                    if "boot" not in found_types:
+                        idx = chunk.find(b"ANDROID!")
+                        if idx != -1: add_extract("android_boot", cursor + idx, "boot")
 
-                    # 6. Legacy SquashFS (hsqs / sqsh)
-                    for magic in (b"hsqs", b"sqsh"):
-                        idx = 0
-                        while True:
-                            idx = chunk.find(magic, idx)
-                            if idx == -1: break
-                            abs_start = cursor + idx
-                            if abs_start >= data_foa and abs_start not in found_offsets:
-                                found_offsets.add(abs_start)
-                                carve_node.region(f"[EXTRACT:raw]linux_squashfs_{img_count}.img", abs_start, file_size - abs_start, color=hx.RED)
-                                img_count += 1
-                            idx += 4
+                    # 6. Legacy SquashFS
+                    if "squashfs" not in found_types:
+                        sq_idx = chunk.find(b"hsqs")
+                        if sq_idx == -1: sq_idx = chunk.find(b"sqsh")
+                        if sq_idx != -1: add_extract("linux_squashfs", cursor + sq_idx, "squashfs")
 
                     # 7. Linux ELF Kernel
-                    idx = 0
-                    while True:
-                        idx = chunk.find(b"\x7FELF", idx)
-                        if idx == -1: break
-                        abs_start = cursor + idx
-                        if abs_start >= data_foa and abs_start not in found_offsets:
-                            found_offsets.add(abs_start)
-                            carve_node.region(f"[EXTRACT:raw]linux_kernel_{img_count}.elf", abs_start, min(file_size - abs_start, 50 * 1024 * 1024), color=hx.RED)
+                    if "elf" not in found_types:
+                        idx = chunk.find(b"\x7FELF")
+                        if idx != -1:
+                            carve_node.region(f"[EXTRACT:raw]linux_kernel_{img_count}.elf", cursor + idx, min(file_size - (cursor + idx), 50 * 1024 * 1024), color=hx.RED)
+                            found_types.add("elf")
                             img_count += 1
-                        idx += 4
 
-                    # 8. Linux bzImage (HdrS at 0x202)
-                    idx = 0
-                    while True:
-                        idx = chunk.find(b"HdrS", idx)
-                        if idx == -1: break
-                        part_start = cursor + idx - 0x202
-                        if part_start >= data_foa and part_start not in found_offsets:
-                            found_offsets.add(part_start)
-                            carve_node.region(f"[EXTRACT:raw]linux_bzImage_{img_count}.bin", part_start, min(file_size - part_start, 30 * 1024 * 1024), color=hx.RED)
+                    # 8. Linux bzImage
+                    if "bzimage" not in found_types:
+                        idx = chunk.find(b"HdrS")
+                        if idx != -1 and idx >= 0x202:
+                            carve_node.region(f"[EXTRACT:raw]linux_bzImage_{img_count}.bin", cursor + idx - 0x202, min(file_size - (cursor + idx - 0x202), 30 * 1024 * 1024), color=hx.RED)
+                            found_types.add("bzimage")
                             img_count += 1
-                        idx += 4
+
+                    if len(found_types) >= 8:
+                        break
 
                     cursor += chunk_size
-                    
+
                 if img_count == 0:
                     carve_node.seek(data_foa)
                     carve_node.region(f"[EXTRACT:raw]raw_vmdk_payload.bin", data_foa, file_size - data_foa, color=hx.GRAY)
 
-    # =========================================================
-    # 5. Macro Block Mapping (UI Layout)
-    # =========================================================
     if gd_foa < file_size and gd_foa > 0:
         root.region("Grain Directory (L1 Translation Table)", gd_foa, min(file_size - gd_foa, 4096), color=hx.PURPLE)
-
-    if data_foa < file_size and data_foa > 0:
-        root.region("Physical Data Grains (Virtual Machine Data)", data_foa, file_size - data_foa, color=hx.GRAY)
 
 hx.register("VMDK", detect, parse)
