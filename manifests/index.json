@@ -1,6 +1,6 @@
 {
-  "repo_version": "1.1",
-  "last_updated": "2026-08-16T13:50:11Z",
+  "repo_version": "1.2",
+  "last_updated": "2026-09-06T09:06:07Z",
   "scripts": [
     {
       "id": "johex.parser.7z",
@@ -99,6 +99,18 @@
       "file_hash": "0398299c3733ac3e5f76f83047fc94fa1ae559510c3d3ef1e4617aaa20a55f74"
     },
     {
+      "id": "johex.parser.linux_kernel",
+      "name": "Linux Kernel Parser",
+      "version": "1.0.0",
+      "author": "EJoyApp Team",
+      "category": "Firmware & System",
+      "description": "A structural parser for Linux Kernel images (bzImage).\r\nParses the real-mode setup header and automatically locates\r\nthe embedded compressed payload (GZIP/XZ/LZMA/ZSTD) for extraction.",
+      "features": "• Linux Boot Protocol header parsing (HdrS)\r\n• Real-mode setup and Protected-mode isolation\r\n• Automated extraction for embedded compressed payloads\r\n• Heuristic fallback scanning for older kernel versions",
+      "formats": ".bzImage, vmlinuz, .bin",
+      "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/linux_kernel_parser.py",
+      "file_hash": "c536e0917eb34d747e803e43ec862135797965b9901bbdd64601fc8fb94af3fb"
+    },
+    {
       "id": "johex.parser.mp3",
       "name": "MP3 Parser",
       "version": "1.3.1",
@@ -125,38 +137,38 @@
     {
       "id": "johex.parser.ntfs",
       "name": "NTFS Parser",
-      "version": "1.3.1",
+      "version": "1.4.1",
       "author": "EJoyApp Team",
       "category": "File System Parsers",
       "description": "An industrial-grade forensic parser for raw NTFS volumes and disk images.\r\nFeatures intelligent MBR/GPT partition routing, BIOS Parameter Block (BPB) decoding,\r\nand LCN-to-FOA translation for instant jumps to the Master File Table ($MFT).",
       "features": "• Intelligent MBR/GPT partition routing\r\n• BIOS Parameter Block (BPB) decoding\r\n• LCN-to-FOA translation\r\n• Instant jumps to the Master File Table ($MFT)",
       "formats": ".ntfs, .img, .dd, .vhd, .vhdx",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/ntfs_parser.py",
-      "file_hash": "f97975ddbde6f850a46af8739aa4c41c48d79cddbf56ba76a4cabf545aa93a2b"
+      "file_hash": "4aca56175246e43651abd74b8c7fa3f215f83fdee824f306014c67777c9897c3"
     },
     {
       "id": "johex.parser.pdf",
       "name": "PDF Parser",
-      "version": "1.3.1",
+      "version": "1.4.0",
       "author": "EJoyApp Team",
       "category": "Document Parsers",
-      "description": "A structural parser for Adobe's Portable Document Format. Identifies the\r\nfile header, isolates raw binary streams, and maps the Cross-Reference (xref)\r\ntable to provide FOA navigation to internal objects and the trailer.",
-      "features": "• File header identification\r\n• Raw binary stream isolation\r\n• Cross-Reference (xref) table mapping\r\n• FOA navigation to internal objects and trailer",
+      "description": "A structural parser for Adobe's Portable Document Format. Identifies the\r\nfile header, isolates raw binary streams, and maps the Cross-Reference (xref)\r\ntable to provide FOA navigation to internal objects and the trailer.\r\nNow includes automated stream extraction capabilities.",
+      "features": "• File header identification\r\n• Raw binary stream isolation & automated extraction\r\n• Cross-Reference (xref) table mapping\r\n• FOA navigation to internal objects and trailer",
       "formats": ".pdf",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/pdf_parser.py",
-      "file_hash": "bc76bc842a559951a081b4b273a2c42ca8366842b2d76bd633cdcc4ed381cb97"
+      "file_hash": "863bcec84e57e3aa20051f89dc07f22b1bbca7b9df580d3284f471e6cbd8210a"
     },
     {
       "id": "johex.parser.pe",
       "name": "PE Parser",
-      "version": "1.3.1",
+      "version": "1.4.0",
       "author": "EJoyApp Team",
       "category": "File Format Parsers",
-      "description": "A comprehensive and high-performance parser designed to deconstruct and analyze\r\nWindows Portable Executable (PE) binaries. It provides reverse engineers and\r\nsecurity researchers with deep visibility into the internal structures, memory\r\nlayout, and execution dependencies of Windows executables.",
+      "description": "A comprehensive and high-performance parser designed to deconstruct and analyze\r\nWindows Portable Executable (PE) binaries. It provides reverse engineers and\r\nsecurity researchers with deep visibility into the internal structures, memory\r\nlayout, and execution dependencies of Windows executables. Now includes fully\r\nautomated resource extraction support.",
       "features": "• Comprehensive DOS Header & Rich Signature extraction\r\n• NT Headers (COFF File Header & Optional Header) analysis\r\n• Detailed Section Table parsing with entropy calculation\r\n• Import Directory (IAT/INT) and Export Directory resolution\r\n• Base Relocation Table & TLS Directory parsing\r\n• Resource Tree (Icon, Version Info, Manifest) extraction\r\n• Digital Signature & Security Directory validation",
       "formats": ".exe, .dll, .sys, .ocx, .efi",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/pe_parser.py",
-      "file_hash": "89521ab41bc4bf407e74297876dd1483e31cb1b8f2f8f9bc4ac6fb8133ef761d"
+      "file_hash": "1af049a6f2a7c2da7ad866c4380f490ea327d5c01563dc1ff142e687fbce5a27"
     },
     {
       "id": "johex.parser.png",
@@ -209,14 +221,26 @@
     {
       "id": "johex.parser.vmdk",
       "name": "VMDK Parser",
-      "version": "1.3.1",
+      "version": "1.4.0",
       "author": "EJoyApp Team",
       "category": "Virtual Disk Parsers",
-      "description": "A forensic parser for VMware monolithic sparse virtual disks.\r\nExtracts the embedded plaintext configuration descriptor and maps\r\nthe dual-layer Grain Directory (L1) and Grain Table (L2) paging structures.",
-      "features": "• Embedded plaintext configuration descriptor extraction\r\n• Dual-layer Grain Directory (L1) and Grain Table (L2) mapping\r\n• Sparse Header and capacity calculation\r\n• Data grain isolation",
+      "description": "A forensic parser for VMware monolithic sparse virtual disks.\r\nExtracts the embedded plaintext configuration descriptor and maps\r\nthe dual-layer Grain Directory (L1) and Grain Table (L2) structures.\r\nFeatures a unified Whole File Block Scanning engine for Android/Linux.",
+      "features": "• Embedded plaintext configuration descriptor extraction\r\n• Dual-layer Grain Directory (L1) and Grain Table (L2) mapping\r\n• Unified carving for Ext4, EROFS, F2FS, Android Sparse & Boot, SquashFS, ELF\r\n• Deflate compression detection",
       "formats": ".vmdk",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/vmdk_parser.py",
-      "file_hash": "3b0a9abfd5321d927fb3b4581298ea4e2e71440fd15a2d9a54628f5853ee58dd"
+      "file_hash": "4cc4ac30b25f4467dee3937962758d531720fbc4a8afb54d1c4e444f78358afd"
+    },
+    {
+      "id": "johex.parser.vmlinux_elf",
+      "name": "vmlinux (ELF) Parser",
+      "version": "1.0.0",
+      "author": "EJoyApp Team",
+      "category": "Firmware & System",
+      "description": "A structural parser for uncompressed Linux Kernel images (vmlinux/ELF).\r\nAutomatically resolves section headers to extract forensics data like\r\n.modinfo, kallsyms, and symbol tables.",
+      "features": "• 32-bit and 64-bit ELF structural parsing\r\n• Section Header Table (SHT) mapping\r\n• Automated extraction for .modinfo (Kernel Modules)\r\n• Automated extraction for .symtab, .strtab, and __ksymtab",
+      "formats": ".elf, vmlinux, .ko",
+      "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/vmlinux_elf_parser.py",
+      "file_hash": "d14632b0e82a32e165cddcc2bcf5e331afcbf2cdb1e09bf2930e8154f0e7a506"
     },
     {
       "id": "johex.parser.wav",
@@ -257,14 +281,14 @@
     {
       "id": "johex.parser.zip",
       "name": "ZIP Parser",
-      "version": "1.3.1",
+      "version": "1.4.0",
       "author": "EJoyApp Team",
       "category": "Archive Parsers",
-      "description": "A high-performance structural parser for the standard ZIP archive format.\r\nParses Local File Headers and provides reverse-engineered FOA routing from\r\nthe End of Central Directory (EOCD) back to the Central Directory records.",
-      "features": "• Local File Headers parsing\r\n• End of Central Directory (EOCD) to Central Directory reverse routing\r\n• Compressed data isolation\r\n• Regex-based boundary scanning",
+      "description": "A high-performance structural parser for the standard ZIP archive format.\r\nParses Local File Headers and provides reverse-engineered FOA routing from\r\nthe End of Central Directory (EOCD) back to the Central Directory records.\r\nNow includes automated data extraction tags.",
+      "features": "• Local File Headers parsing\r\n• End of Central Directory (EOCD) to Central Directory reverse routing\r\n• Compressed data isolation & extraction tagging\r\n• Regex-based boundary scanning",
       "formats": ".zip, .apk, .jar",
       "download_url": "https://raw.githubusercontent.com/ejoyapp/johex-script-repo/main/scripts/zip_parser.py",
-      "file_hash": "52a486818797deb8809ca0832707e81e7b40e49b724d461cf0867f42760d3ea9"
+      "file_hash": "c2a06fd5700dd7f527f84dcb2ab6689a10944628ac45c9a6ac6aa2cb1591f417"
     }
   ]
 }
