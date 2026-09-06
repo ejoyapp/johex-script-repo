@@ -14,7 +14,7 @@ Modification of this core script may affect built-in analysis features.
 # =================================================================
 __id__          = "johex.parser.ntfs"
 __name__        = "NTFS Parser"
-__version__     = "1.3.1"
+__version__     = "1.4.1"
 __author__      = "EJoyApp Team"
 __category__    = "File System Parsers"
 __description__ = '''
@@ -250,22 +250,116 @@ def parse(r, root):
         root.region("Partition Free Cluster Space", BASE_OFFSET + 512, mft_foa - (BASE_OFFSET + 512), color=hx.GRAY)
 
     # =========================================================
-    # 2. Dynamic guided landing point: Master File Table ($MFT)
+    # 2. OPTIMIZED MFT CARVING (Fast Deleted Files Recovery)
     # =========================================================
     if mft_foa < file_size:
-        try:
-            mft_magic = r.read(mft_foa, 4)
-            print(f"[Parser] Successfully jumped to $MFT FOA: 0x{mft_foa:X}. Inspected Magic: {repr(mft_magic)}")
-        except Exception as e:
-            print(f"[Parser] [FAILED] Reading $MFT target error: {str(e)}")
-            return
-
-        if mft_magic == b'FILE':
-            with root.struct("Master File Table: FILE0 Record ($MFT)", color=hx.PURPLE) as mft_node:
-                mft_node.seek(mft_foa)
-                mft_node.bytes("Magic Header", 4, color=hx.YELLOW)
-                mft_node.region("Attributes Streams", mft_node.tell(), mft_record_size - 4, color=hx.GRAY)
-        else:
-            root.region("Master File Table Area (Raw)", mft_foa, mft_record_size, color=hx.GRAY)
+        with root.struct("Recovered Deleted Files (Fast Carving)", color=hx.ORANGE) as recovery_node:
+            # Starting directly from the $MFT physical starting point, only scan 50MB (enough to cover the MFT table of 50,000 files)
+            chunk_size = 16 * 1024 * 1024
+            overlap = mft_record_size
+            
+            cursor = mft_foa
+            scan_limit = min(file_size, mft_foa + 50 * 1024 * 1024) # <--- 只扫 50MB
+            
+            deleted_count = 0
+            scanned_records = 0
+            total_scan_size = scan_limit - mft_foa
+            
+            while cursor < scan_limit:
+                if hasattr(r, 'update_status'):
+                    progress = int(((cursor - mft_foa) / total_scan_size) * 100)
+                    r.update_status(f"Deep scanning MFT: {progress}% (Recovered: {deleted_count})...")
+                read_size = min(chunk_size + overlap, scan_limit - cursor)
+                if read_size <= 0: break
+                
+                chunk = r.read(cursor, read_size)
+                if not chunk: break
+                
+                idx = 0
+                while True:
+                    idx = chunk.find(b'FILE', idx)
+                    if idx == -1: break
+                    
+                    if idx + mft_record_size <= len(chunk):
+                        record = chunk[idx : idx + mft_record_size]
+                        
+                        usa_off = struct.unpack_from("<H", record, 0x04)[0]
+                        attr_off = struct.unpack_from("<H", record, 0x14)[0]
+                        flags = struct.unpack_from("<H", record, 0x16)[0]
+                        
+                        if usa_off in (0x28, 0x30) and attr_off in (0x30, 0x38):
+                            scanned_records += 1
+                            
+                            if scanned_records % 5000 == 0 and hasattr(r, 'update_status'):
+                                r.update_status(f"Analyzing MFT records... ({scanned_records} scanned)")
+                                
+                            # (flags & 1) == 0 This indicates that the file has been deleted.
+                            if (flags & 1) == 0:
+                                file_name = f"recovered_{deleted_count}.bin"
+                                data_foa = 0
+                                data_length = 0
+                                
+                                p = attr_off
+                                while p + 8 <= mft_record_size:
+                                    attr_type = struct.unpack_from("<I", record, p)[0]
+                                    if attr_type == 0xFFFFFFFF: break
+                                    
+                                    attr_len = struct.unpack_from("<I", record, p+4)[0]
+                                    if attr_len <= 0 or p + attr_len > mft_record_size: break
+                                    non_resident = record[p+8]
+                                    
+                                    if attr_type == 0x30 and non_resident == 0:
+                                        name_len = record[p+0x58]
+                                        if name_len > 0 and p + 0x5A + name_len*2 <= mft_record_size:
+                                            try:
+                                                decoded = record[p+0x5A : p+0x5A + name_len*2].decode('utf-16le', 'ignore')
+                                                if decoded: file_name = decoded
+                                            except: pass
+                                            
+                                    elif attr_type == 0x80:
+                                        if non_resident == 0:
+                                            res_len = struct.unpack_from("<I", record, p+0x10)[0]
+                                            res_off = struct.unpack_from("<H", record, p+0x14)[0]
+                                            if p + res_off + res_len <= mft_record_size:
+                                                data_foa = (cursor + idx) + p + res_off
+                                                data_length = res_len
+                                        else:
+                                            runlist_off = struct.unpack_from("<H", record, p+0x20)[0]
+                                            actual_size = struct.unpack_from("<Q", record, p+0x30)[0]
+                                            run_p = p + runlist_off
+                                            if run_p < p + attr_len:
+                                                header = record[run_p]
+                                                if header != 0:
+                                                    len_len = header & 0x0F
+                                                    off_len = header >> 4
+                                                    if 0 < len_len <= 8 and 0 < off_len <= 8:
+                                                        run_len_bytes = record[run_p+1 : run_p+1+len_len] + b'\x00'*8
+                                                        run_len = struct.unpack_from("<Q", run_len_bytes, 0)[0]
+                                                        
+                                                        run_off_bytes = record[run_p+1+len_len : run_p+1+len_len+off_len]
+                                                        lcn = int.from_bytes(run_off_bytes, 'little', signed=True)
+                                                        
+                                                        data_foa = BASE_OFFSET + lcn * cluster_size
+                                                        data_length = min(actual_size, run_len * cluster_size)
+                                    p += attr_len
+                                    
+                                if data_length > 0 and data_foa > 0:
+                                    safe_name = "".join(c for c in file_name if c.isalnum() or c in ".-_ ")
+                                    recovery_node.seek(data_foa)
+                                    recovery_node.region(f"[EXTRACT:raw]RECOVER_{safe_name}", data_foa, data_length, color=hx.RED)
+                                    deleted_count += 1
+                                    
+                            idx += mft_record_size
+                            continue
+                            
+                    idx += 4
+                    
+                cursor += chunk_size
+                if deleted_count >= 150: break
+                
+            if hasattr(r, 'update_status'):
+                r.update_status("Ready")
+            if deleted_count == 0:
+                recovery_node.region(f"Scanned {scanned_records} MFT records. No recoverable files found.", 0, 0, color=hx.GRAY)
 
 hx.register("NTFS", detect, parse)
