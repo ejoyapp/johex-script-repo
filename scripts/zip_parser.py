@@ -4,6 +4,7 @@ JoHex Official Script: ZIP Archive Parser
 A high-performance structural parser for the standard ZIP archive format.
 Parses Local File Headers and provides reverse-engineered FOA routing from the 
 End of Central Directory (EOCD) back to the Central Directory records.
+Includes automatic File Data extraction tagging for Archive Browser.
 
 This is an officially maintained script distributed with JoHex.
 Modification of this core script may affect built-in analysis features.
@@ -14,18 +15,19 @@ Modification of this core script may affect built-in analysis features.
 # =================================================================
 __id__          = "johex.parser.zip"
 __name__        = "ZIP Parser"
-__version__     = "1.3.1"
+__version__     = "1.4.0" # Bumped version for Archive Browser extraction support
 __author__      = "EJoyApp Team"
 __category__    = "Archive Parsers"
 __description__ = '''
     "A high-performance structural parser for the standard ZIP archive format. "
     "Parses Local File Headers and provides reverse-engineered FOA routing from "
-    "the End of Central Directory (EOCD) back to the Central Directory records."
+    "the End of Central Directory (EOCD) back to the Central Directory records. "
+    "Now includes automated data extraction tags."
 '''
 __features__    = '''
     "• Local File Headers parsing"
     "• End of Central Directory (EOCD) to Central Directory reverse routing"
-    "• Compressed data isolation"
+    "• Compressed data isolation & extraction tagging"
     "• Regex-based boundary scanning"
 '''
 __formats__     = ".zip, .apk, .jar"
@@ -37,59 +39,34 @@ import johexedit as hx
 import struct
 
 # Register static features (for AI or other static scanning tools)
-# The standard Local File Header signature
 MAGIC_BYTES = b"PK\x03\x04"
 SUPPORTED_EXTS = [".zip", ".cbz", ".epub", ".jar", ".apk"]
 FORMAT_NAME = "ZIP Archive"
 
 def identify(hex_prefix: bytes, file_ext: str) -> int:
-    """
-    Detection function called by the C++ engine.
-    Receives the first 4KB byte stream (hex_prefix) and the file extension.
-    """
-    # 1. Check for the standard ZIP Local File Header signature 'PK\x03\x04'
     if len(hex_prefix) >= 4:
         if hex_prefix.startswith(MAGIC_BYTES):
-            
-            # 2. A standard Local File Header is exactly 30 bytes long (excluding the variable-length filename/extra fields).
-            # To increase certainty, we can verify the file has at least the minimum header length.
             if len(hex_prefix) >= 30:
-                
-                # We could further validate fields like the compression method at offset 0x08,
-                # but the PK\x03\x04 signature coupled with a valid 30-byte header length 
-                # is generally enough to confirm a standard ZIP file.
-                return 100  # 100% certainty that it is a standard ZIP archive
-                
-            # Magic bytes match exactly, but the file is severely truncated (less than 30 bytes total)
+                return 100
             return 80
-            
-        # 3. Fallback check for an empty ZIP archive.
-        # Empty ZIP files contain no files and just consist of an End of Central Directory (EOCD) record.
         elif hex_prefix.startswith(b"PK\x05\x06"):
-            if len(hex_prefix) >= 22: # The minimum size of an EOCD record is 22 bytes
-                return 100  # 100% certainty that it is an empty ZIP archive
+            if len(hex_prefix) >= 22:
+                return 100
             return 80
-            
-        # 4. Fallback check for Spanned/Split ZIP archives.
-        # These often start with a spanning signature 'PK\x07\x08'
         elif hex_prefix.startswith(b"PK\x07\x08"):
             return 90
-            
     return 0
 
 def detect(r):
-    # Standard file header signature for ZIP files (PK\x03\x04) or EOCD signature for empty ZIPs (PK\x05\x06)
     if r.size < 4:
         return False
     sig = r.u32(0)
-    # 50 4B 03 04 in memory becomes 0x04034B50 when read in little-endian
     return sig in (0x04034B50, 0x06054B50)
 
 def parse(r, root):
     cursor = 0
     file_size = r.size
 
-    # Use sequential scanning mode to parse the building-block-like ZIP structure
     while cursor <= file_size - 4:
         root.seek(cursor)
         sig = r.u32(cursor)
@@ -102,10 +79,10 @@ def parse(r, root):
                 lfh.u32("Signature", color=hx.YELLOW, fmt=lambda v: "PK\\x03\\x04 (Local File Header)")
                 lfh.u16("Version Needed To Extract")
                 
-                # General Purpose Bit Flag
                 flags = lfh.u16("General Purpose Bit Flag", fmt=lambda v: f"0x{v:04X}")
                 
-                lfh.u16("Compression Method", fmt=lambda v: "Store (0)" if v == 0 else f"Deflate (8)" if v == 8 else str(v))
+                comp_method = lfh.u16("Compression Method", fmt=lambda v: "Store (0)" if v == 0 else f"Deflate (8)" if v == 8 else str(v))
+                
                 lfh.u16("Last Mod File Time")
                 lfh.u16("Last Mod File Date")
                 lfh.u32("CRC-32", fmt=lambda v: f"0x{v:08X}")
@@ -115,7 +92,6 @@ def parse(r, root):
                 name_len = lfh.u16("File Name Length")
                 extra_len = lfh.u16("Extra Field Length")
 
-                # Parse the file name (use fmt to display the decoded text directly on the UI tree)
                 file_name = "Unknown"
                 if name_len > 0:
                     raw_name = lfh.bytes("File Name", name_len, fmt=lambda v: v.decode('utf-8', 'ignore'))
@@ -127,23 +103,25 @@ def parse(r, root):
 
                 data_start = lfh.tell()
 
-                # [Advanced Detection Mechanism]: Handle unknown data stream lengths
-                # If Bit 3 of Flags is set, it means the size is recorded in the following Data Descriptor
                 if (flags & 0x0008) != 0 and comp_size == 0:
                     scan_cursor = data_start
                     while scan_cursor <= file_size - 4:
                         nxt_sig = r.u32(scan_cursor)
-                        # Scan for the next known block signature
                         if nxt_sig in (0x08074B50, 0x02014B50, 0x04034B50, 0x06054B50):
                             break
                         scan_cursor += 1
                     comp_size = scan_cursor - data_start
 
-                # Mount the actual compressed file data block on the UI tree
                 if comp_size > 0:
-                    root.region(f"File Data [{file_name}]", data_start, comp_size, color=hx.GREEN)
+                    ext_method = "raw" if comp_method == 0 else "deflate" if comp_method == 8 else f"method_{comp_method}"
+                    
+                    safe_name = file_name.replace('\\', '/')
+                    
+                    # example：[EXTRACT:deflate]res/drawable/icon.png
+                    extract_tag = f"[EXTRACT:{ext_method}]{safe_name}"
+                    
+                    root.region(extract_tag, data_start, comp_size, color=hx.GREEN)
 
-                # Jump the outer loop cursor directly past the data block
                 cursor = data_start + comp_size
 
         # =========================================================
@@ -168,11 +146,7 @@ def parse(r, root):
                 cdh.u16("Internal File Attributes")
                 cdh.u32("External File Attributes")
 
-                # [Linked Hyperlink]: Apply the target mechanism
-                # Read the absolute offset in advance using r
                 offset_val = r.u32(cdh.tell())
-                
-                # Inject target! Double-click this line, and the main view instantly leaps back to the Local File Header at the beginning of the file
                 cdh.u32("Relative Offset of Local Header", color=hx.RED, target=offset_val,
                         fmt=lambda v: f"0x{v:08X} -> [Double Click to Jump LFH]")
 
@@ -187,7 +161,7 @@ def parse(r, root):
                 cursor = cdh.tell()
 
         # =========================================================
-        # 3. End of Central Directory (EOCD - ZIP end signature)
+        # 3. End of Central Directory (EOCD)
         # =========================================================
         elif sig == 0x06054B50:
             with root.struct("End of Central Directory", color=hx.ORANGE) as eocd:
@@ -198,7 +172,6 @@ def parse(r, root):
                 eocd.u16("Total number of CD records")
                 eocd.u32("Size of Central Directory")
 
-                # [Linked Hyperlink]: Points to the absolute offset of the start of the entire Central Directory
                 cd_offset = r.u32(eocd.tell())
                 eocd.u32("Offset of Central Directory", color=hx.RED, target=cd_offset,
                          fmt=lambda v: f"0x{v:08X} -> [Double Click to Jump CD]")
@@ -208,8 +181,6 @@ def parse(r, root):
                     eocd.bytes("Comment", com_len, fmt=lambda v: v.decode('utf-8', 'ignore'))
 
                 cursor = eocd.tell()
-            
-            # Encountering EOCD usually represents the logical end of the ZIP file, break the loop
             break 
 
         # =========================================================
@@ -223,7 +194,6 @@ def parse(r, root):
                 dd.u32("Uncompressed Size")
                 cursor = dd.tell()
 
-        # If an unrecognized signature block is encountered, safely move the cursor forward byte by byte (enhances robustness)
         else:
             cursor += 1
 
